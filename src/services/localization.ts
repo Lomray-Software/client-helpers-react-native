@@ -66,7 +66,7 @@ const customInit = (options: InitOptions, callback?: Callback): Promise<TFunctio
       fallbackLng: 'en',
       lng: customI18n.getCurrentLocale(),
       keySeparator: false,
-      defaultNS: 'app',
+      defaultNS: 'translation',
       ...options,
     },
     callback,

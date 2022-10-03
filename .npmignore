@@ -16,3 +16,5 @@ rollup.config.js
 .prettierrc.js
 sonar-project.properties
 tsconfig.json
+release.config.js
+typings

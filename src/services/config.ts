@@ -43,13 +43,23 @@ class Config {
         text: '#ffffff',
       },
     },
+    hapticFeedbackOptions: {
+      enableVibrateFallback: false,
+      ignoreAndroidSystemSettings: true,
+    },
   };
+
+  /**
+   * @private
+   */
+  private isSetup = false;
 
   /**
    * Set config
    */
   setup(params: IConfigParams): void {
     this.params = _.merge(this.params, params);
+    this.isSetup = true;
   }
 
   /**
@@ -59,6 +69,10 @@ class Config {
     key: TKey,
     defaultValue?: TDefault,
   ): IConfigParams[TKey] | TDefault {
+    if (!this.isSetup) {
+      console.warn("Don't try get config value before setup (Config.get).");
+    }
+
     return this.params[key] ?? defaultValue;
   }
 }

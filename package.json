@@ -34,7 +34,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "^7.19.0",
     "@lomray/react-native-layout-helper": "^1.0.2",
     "atomic-batcher": "^1.0.2",
     "i18next": "^21.6.14",
@@ -46,6 +46,8 @@
     "react-native-uuid": "^2.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/preset-react": "^7.18.6",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@lomray/eslint-config": "^2.0.1",
@@ -88,7 +90,8 @@
     "react-native-code-push": ">=7.0.4",
     "react-native-fbsdk-next": ">=10.1.0",
     "react-native-haptic-feedback": "^1.14.0",
-    "react-native-navigation": ">=7.28.0"
+    "react-native-navigation": ">=7.28.0",
+    "yup": "^0.32.11"
   },
   "bundledDependencies": [
     "tslib"

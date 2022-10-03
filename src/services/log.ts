@@ -28,12 +28,12 @@ const firebaseCrashlyticsTransport = (
   crashlytics: ILoggerOptions['crashlytics'],
   { msg, level, rawMsg }: Parameters<transportFunctionType>[0],
 ): void => {
-  crashlytics().log(msg as string);
+  crashlytics.log(msg as string);
 
   const error = rawMsg?.[1] ?? null;
 
   if (level.text === 'error' && error?.message) {
-    crashlytics().recordError(error as Error);
+    crashlytics.recordError(error as Error);
   }
 };
 

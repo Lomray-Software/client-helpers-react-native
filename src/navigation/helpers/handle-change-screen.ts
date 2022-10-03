@@ -12,7 +12,7 @@ enum EventScreen {
 interface IHandleChangeScreen {
   hiddenOverlays: string[];
   hiddenModals: string[];
-  callback: (event: EventScreen, params: ComponentDidAppearEvent) => void;
+  callback?: (event: EventScreen, params: ComponentDidAppearEvent) => void;
 }
 
 /**
@@ -31,7 +31,7 @@ const HandleChangeScreen = ({
     if (hiddenOverlays.includes(componentName)) {
       // Overlay change
       logger?.info(`View overlay: ${componentName}. Id: ${componentId}`);
-      callback(EventScreen.overlay, params);
+      callback?.(EventScreen.overlay, params);
 
       return;
     }
@@ -39,7 +39,7 @@ const HandleChangeScreen = ({
     if (hiddenModals.includes(componentName)) {
       // Modal change
       logger?.info(`View modal: ${componentName}. Id: ${componentId}`);
-      callback(EventScreen.modal, params);
+      callback?.(EventScreen.modal, params);
 
       return;
     }
@@ -47,8 +47,8 @@ const HandleChangeScreen = ({
     // Screen change (push)
     NavigationService.setComponentId(componentId);
     logger?.info(`View screen: ${componentName}. Id: ${componentId}`);
-    callback(EventScreen.screen, params);
+    callback?.(EventScreen.screen, params);
   });
 };
 
-export default HandleChangeScreen;
+export { EventScreen, HandleChangeScreen };

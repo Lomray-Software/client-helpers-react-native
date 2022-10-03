@@ -20,20 +20,22 @@ export default {
   external: ['axios', 'lodash'],
   plugins: [
     folderInput(),
-    peerDepsExternal({
-      includeDependencies: true,
-    }),
-    json(),
     typescript({
       transpiler: {
         typescriptSyntax: 'typescript',
         otherSyntax: 'babel'
       },
       babelConfig: {
-        presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript', '@babel/preset-flow'],
+        presets: [
+          '@babel/preset-env',
+          '@babel/preset-react'
+        ],
         plugins: [
           ['@babel/plugin-proposal-class-properties'],
-        ]
+          ['@babel/plugin-transform-runtime', {
+            "absoluteRuntime": false,
+          }],
+        ],
       },
       tsconfig: resolvedConfig => ({
         ...resolvedConfig,
@@ -47,6 +49,10 @@ export default {
         ]
       }),
     }),
+    peerDepsExternal({
+      includeDependencies: true,
+    }),
+    json(),
     terser(),
     copy({
       targets: [

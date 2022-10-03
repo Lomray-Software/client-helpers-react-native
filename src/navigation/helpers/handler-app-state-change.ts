@@ -5,12 +5,10 @@ import Config from '../../services/config';
 /**
  * Handle application change state. Foreground/Background.
  */
-const HandleAppStateChange = (
-  callback: (nextAppState: AppStateStatus) => Promise<void> | void,
-): void => {
+const HandleAppStateChange = (callback?: (nextAppState: AppStateStatus) => void): void => {
   AppState.addEventListener('change', (nextAppState) => {
     Config.get('logger')?.info(`App state change: ${nextAppState}.`);
-    void callback(nextAppState);
+    callback?.(nextAppState);
   });
 };
 
