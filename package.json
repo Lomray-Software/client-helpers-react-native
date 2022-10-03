@@ -1,0 +1,96 @@
+{
+  "name": "@lomray/client-helpers-react-native",
+  "version": "1.0.0",
+  "description": "Package contains common client side helpers for React Native.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "keywords": [
+    "js",
+    "helpers",
+    "pack",
+    "react",
+    "native",
+    "client"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lomray-Software/client-helpers-react-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lomray-Software/client-helpers-react-native/issues"
+  },
+  "homepage": "https://github.com/Lomray-Software/client-helpers-react-native",
+  "author": "Mikhail Yarmaliuk",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "rollup -c",
+    "release": "npm run build && cd lib && npm publish",
+    "lint:check": "eslint --ext \".ts,.tsx\" \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
+    "lint:format": "eslint --fix --ext \".ts,.tsx\" \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
+    "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "@lomray/react-native-layout-helper": "^1.0.2",
+    "atomic-batcher": "^1.0.2",
+    "i18next": "^21.6.14",
+    "react-i18next": "^11.16.2",
+    "react-native-flash-message": "^0.2.1",
+    "react-native-localize": "^2.2.1",
+    "react-native-logs": "^4.0.1",
+    "react-native-mixed-splash": "^1.0.0",
+    "react-native-uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@lomray/eslint-config": "^2.0.1",
+    "@lomray/prettier-config": "^1.2.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^17.0.50",
+    "@types/react-native": "^0.67.3",
+    "@zerollup/ts-transform-paths": "^1.7.18",
+    "eslint": "8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "react": "^17.0.2",
+    "react-native": "0.67.4",
+    "rollup": "^2.79.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-folder-input": "^1.0.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-ts": "^3.0.2",
+    "semantic-release": "^19.0.5",
+    "ttypescript": "^1.5.13",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@invertase/react-native-apple-authentication": "^2.2.2",
+    "@lomray/client-helpers": "*",
+    "@react-native-community/netinfo": "^8.3.1",
+    "@react-native-firebase/auth": ">=14.7.0",
+    "@react-native-firebase/messaging": ">=14.7.0",
+    "@react-native-google-signin/google-signin": "^7.2.2",
+    "axios": "*",
+    "lodash": "*",
+    "react": ">=16.8.0",
+    "react-native": ">=0.62.0",
+    "react-native-code-push": ">=7.0.4",
+    "react-native-fbsdk-next": ">=10.1.0",
+    "react-native-haptic-feedback": "^1.14.0",
+    "react-native-navigation": ">=7.28.0"
+  },
+  "bundledDependencies": [
+    "tslib"
+  ]
+}
