@@ -85,12 +85,14 @@
     "@react-native-google-signin/google-signin": "^7.2.2",
     "axios": "*",
     "lodash": "*",
+    "mobx": "^6.6.2",
     "react": ">=16.8.0",
     "react-native": ">=0.62.0",
     "react-native-code-push": ">=7.0.4",
     "react-native-fbsdk-next": ">=10.1.0",
     "react-native-haptic-feedback": "^1.14.0",
     "react-native-navigation": ">=7.28.0",
+    "react-native-device-info": ">=8.7.1",
     "yup": "^0.32.11"
   },
   "bundledDependencies": [
