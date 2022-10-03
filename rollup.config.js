@@ -53,7 +53,10 @@ export default {
       includeDependencies: true,
     }),
     json(),
-    terser(),
+    terser({
+      keep_classnames: true,
+      keep_fnames: true,
+    }),
     copy({
       targets: [
         { src: 'typings/**/*', dest: 'lib/typings' },
