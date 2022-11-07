@@ -4,10 +4,10 @@ import Config from '../../services/config';
 /**
  * Request IOS Push Notification permissions
  */
-const RequestPushNotificationPermission = (): void => {
+const RequestPushNotificationPermission = (): Promise<boolean> => {
   const logger = Config.get('logger');
 
-  void messaging()
+  return messaging()
     .requestPermission()
     .then((authStatus) => {
       const isEnabled =
@@ -15,9 +15,13 @@ const RequestPushNotificationPermission = (): void => {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
       logger?.info(`Push permissions authorization status: ${authStatus} (${String(isEnabled)})`);
+
+      return isEnabled;
     })
     .catch((e) => {
       logger?.error('Request push permissions failed:', e);
+
+      return false;
     });
 };
 
