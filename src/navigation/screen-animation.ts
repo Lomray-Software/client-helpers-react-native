@@ -1,4 +1,4 @@
-import { wp } from '@lomray/react-native-layout-helper';
+import { isAndroid, wp } from '@lomray/react-native-layout-helper';
 import type {
   AnimationOptions,
   OptionsAnimationPropertyConfig,
@@ -97,6 +97,46 @@ const screenAnimations: AnimationOptions = {
       enter: slideInFromRight,
       exit: slideOutAndExit,
     },
+  },
+  setRoot: {
+    waitForRender: true,
+    ...(isAndroid
+      ? {
+          enter: {
+            waitForRender: true,
+            alpha: {
+              from: 0,
+              to: 1,
+              duration: 500,
+              interpolation: {
+                type: 'accelerate',
+              },
+            },
+          },
+          exit: {
+            waitForRender: true,
+            alpha: {
+              from: 1,
+              to: 0,
+              duration: 1000,
+              startDelay: 100,
+              interpolation: {
+                type: 'accelerate',
+              },
+            },
+          },
+        }
+      : {
+          alpha: {
+            from: 0,
+            to: 1,
+            duration: 400,
+            startDelay: 100,
+            interpolation: {
+              type: 'accelerate',
+            },
+          },
+        }),
   },
 };
 
