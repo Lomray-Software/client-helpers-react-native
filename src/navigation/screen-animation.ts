@@ -79,25 +79,29 @@ const slideOutAndExit: ViewAnimationOptions = {
  * @type {object}
  */
 const screenAnimations: AnimationOptions = {
-  push: {
-    content: {
-      enter: slideInFromRight,
-      exit: slideOutToLeft,
-    },
-  },
-  pop: {
-    content: {
-      enter: slideInFromLeft,
-      exit: slideOutToRight,
-    },
-  },
-  setStackRoot: {
-    waitForRender: true,
-    content: {
-      enter: slideInFromRight,
-      exit: slideOutAndExit,
-    },
-  },
+  ...(isAndroid
+    ? {
+        push: {
+          content: {
+            enter: slideInFromRight,
+            exit: slideOutToLeft,
+          },
+        },
+        pop: {
+          content: {
+            enter: slideInFromLeft,
+            exit: slideOutToRight,
+          },
+        },
+        setStackRoot: {
+          waitForRender: true,
+          content: {
+            enter: slideInFromRight,
+            exit: slideOutAndExit,
+          },
+        },
+      }
+    : {}),
   setRoot: {
     waitForRender: true,
     ...(isAndroid
