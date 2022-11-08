@@ -119,6 +119,8 @@ class AppVersionStore {
     const keys = Config.get('codepush');
 
     if (!keys) {
+      this.logger?.warn('Codepush keys not configure.');
+
       return;
     }
 
