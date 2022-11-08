@@ -21,6 +21,16 @@ export interface IConfigParams {
     options?: Partial<MessageOptions>;
   };
   hapticFeedbackOptions?: HapticOptions;
+  codepush?: {
+    staging?: {
+      ios: string;
+      android: string;
+    };
+    prod?: {
+      ios: string;
+      android: string;
+    };
+  };
 }
 
 /**
