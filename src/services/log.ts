@@ -112,7 +112,12 @@ const initLogger = ({ grafana, crashlytics, params = {} }: ILoggerOptions): ILog
   const appBranch = Config.get('appBranch');
   const isLocalDevelopment = Config.get('isLocalDevelopment');
   const isTests = Config.get('isTests');
-  const grafanaTransport = grafanaLokiTransport({ appKeyName, appBranch, grafana, payload });
+  let grafanaTransport: CallableFunction | undefined;
+
+  if (grafana) {
+    grafanaTransport = grafanaLokiTransport({ appKeyName, appBranch, grafana, payload });
+  }
+
   const config: configLoggerType = {
     enabled: !isTests,
     severity: isLocalDevelopment ? 'debug' : 'info',
@@ -121,8 +126,13 @@ const initLogger = ({ grafana, crashlytics, params = {} }: ILoggerOptions): ILog
         consoleTransport(props);
       } else {
         // Production transport
-        firebaseCrashlyticsTransport(crashlytics, props);
-        grafanaTransport(props);
+        if (crashlytics) {
+          firebaseCrashlyticsTransport(crashlytics, props);
+        }
+
+        if (grafanaTransport) {
+          grafanaTransport(props);
+        }
       }
     },
     transportOptions: isLocalDevelopment
