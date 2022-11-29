@@ -35,7 +35,7 @@ const init = ({ isDebug, AsyncStorage, isTests = false }: IConfig) => {
     .configure() // controls connection & communication settings
     .useReactNative({
       networking: {
-        ignoreUrls: /\/(symbolicate|https:\/\/clients3.google.com\/generate_204)$/,
+        ignoreUrls: /(https:\/\/clients3.google.com\/generate_204)/,
       }
     }) // add all built-in react native plugins
     .use(MobxStoreManagerPlugin())
