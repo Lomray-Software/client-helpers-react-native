@@ -25,7 +25,7 @@ const useAnimation = ({
       duration,
       useNativeDriver,
     }).start();
-  }, [doAnimation]);
+  }, [doAnimation, toValue]);
 
   return animation;
 };
