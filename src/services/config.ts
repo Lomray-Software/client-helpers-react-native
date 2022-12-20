@@ -9,6 +9,7 @@ export interface IConfigParams {
   logger?: ILogType;
   isLocalDevelopment?: boolean;
   isTests?: boolean;
+  isProd?: boolean;
   appKeyName?: string;
   appBranch?: string;
   topFlashMessage?: {
@@ -44,6 +45,7 @@ class Config {
   private params: IConfigParams = {
     isLocalDevelopment: false,
     isTests: false,
+    isProd: false,
     appKeyName: 'unknown',
     topFlashMessage: {
       colors: {
