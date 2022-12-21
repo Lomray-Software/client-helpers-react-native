@@ -26,7 +26,11 @@ const HandleChangeScreen = ({
   const logger = Config.get('logger');
 
   Navigation.events().registerComponentDidAppearListener((params) => {
-    const { componentId, componentName } = params;
+    const { componentId, componentName, componentType } = params;
+
+    if (componentType !== 'Component') {
+      return;
+    }
 
     if (hiddenOverlays.includes(componentName)) {
       // Overlay change
@@ -45,7 +49,7 @@ const HandleChangeScreen = ({
     }
 
     // Screen change (push)
-    NavigationService.setComponentId(componentId);
+    NavigationService.setComponentInfo(componentId, componentName);
     logger?.info(`View screen: ${componentName}. Id: ${componentId}`);
     callback?.(EventScreen.screen, params);
   });

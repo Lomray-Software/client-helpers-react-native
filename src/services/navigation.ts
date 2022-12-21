@@ -9,10 +9,17 @@ class Navigation {
   private componentId: string;
 
   /**
+   * Current component name
+   * @private
+   */
+  private componentName: string;
+
+  /**
    * Set current component id
    */
-  public setComponentId(componentId: string): void {
+  public setComponentInfo(componentId: string, componentName: string): void {
     this.componentId = componentId;
+    this.componentName = componentName;
   }
 
   /**
@@ -20,6 +27,13 @@ class Navigation {
    */
   public getComponentId(): string {
     return this.componentId;
+  }
+
+  /**
+   * Get current component id
+   */
+  public getComponentName(): string {
+    return this.componentName;
   }
 }
 
