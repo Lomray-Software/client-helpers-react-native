@@ -34,6 +34,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@babel/runtime": "^7.19.0",
     "@lomray/react-native-layout-helper": "^1.0.3",
     "@lomray/reactotron-mobx-store-manager": "^1.0.0",
     "atomic-batcher": "^1.0.2",
@@ -45,7 +46,6 @@
     "reactotron-react-native": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.19.0",
     "@babel/core": "^7.19.3",
     "@babel/preset-react": "^7.18.6",
     "@commitlint/cli": "^17.1.2",

@@ -53,6 +53,12 @@ const HandleChangeScreen = ({
     logger?.info(`View screen: ${componentName}. Id: ${componentId}`);
     callback?.(EventScreen.screen, params);
   });
+
+  Navigation.events().registerBottomTabSelectedListener(
+    ({ selectedTabIndex, unselectedTabIndex }) => {
+      NavigationService.setBottomTabInfo(selectedTabIndex, unselectedTabIndex);
+    },
+  );
 };
 
 export { EventScreen, HandleChangeScreen };
