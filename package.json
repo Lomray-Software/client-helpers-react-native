@@ -34,7 +34,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@babel/runtime": "^7.19.0",
     "@lomray/react-native-layout-helper": "^1.0.3",
     "@lomray/reactotron-mobx-store-manager": "^1.0.0",
     "atomic-batcher": "^1.0.2",
@@ -46,6 +45,7 @@
     "reactotron-react-native": "^5.0.3"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.19.0",
     "@babel/core": "^7.19.3",
     "@babel/preset-react": "^7.18.6",
     "@commitlint/cli": "^17.1.2",
@@ -66,6 +66,7 @@
     "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-native": "0.67.4",
+    "mobx": "^6.7.0",
     "rollup": "^2.79.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-folder-input": "^1.0.1",
@@ -80,7 +81,7 @@
     "@amplitude/react-native": "^2.16.2",
     "@invertase/react-native-apple-authentication": ">=2.2.2",
     "@lomray/client-helpers": "*",
-    "@react-native-community/netinfo": ">=9.3.4",
+    "@react-native-community/netinfo": "^9.3.7",
     "@react-native-firebase/auth": "15.7.0",
     "@react-native-firebase/messaging": "15.7.0",
     "@react-native-firebase/analytics": "15.7.0",
@@ -88,13 +89,10 @@
     "@react-native-google-signin/google-signin": ">=7.2.2",
     "axios": "*",
     "lodash": "*",
-    "mobx": "^6.6.2",
-    "react": ">=16.8.0",
-    "react-native": "0.67.5",
     "react-native-tracking-transparency": "^0.1.2",
-    "react-native-code-push": ">=7.0.4",
+    "react-native-code-push": "^7.0.5",
     "react-native-device-info": "^8.7.1",
-    "react-native-fbsdk-next": ">=10.1.0",
+    "react-native-fbsdk-next": "^10.1.0",
     "react-native-haptic-feedback": "^1.14.0",
     "react-native-localize": "^2.2.1",
     "react-native-mixed-splash": "^1.0.0",
