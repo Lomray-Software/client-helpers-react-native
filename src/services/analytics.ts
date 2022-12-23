@@ -247,9 +247,9 @@ class Analytics {
         break;
 
       case APP_EVENT.PURCHASE:
-        const price = (props.price || 0) as number;
+        const price = Number(Number(props.price || 0).toFixed(2));
         const currency = (props.currency || 'USD') as string;
-        const count = props.count || 1;
+        const count = Number(props.count || 1);
         const extraParams = (props.params || {}) as Record<string, any>;
 
         void Amplitude.logRevenue({ price, quantity: count, eventProperties: extraParams });
