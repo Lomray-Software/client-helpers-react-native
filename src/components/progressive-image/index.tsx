@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import type { FC } from 'react';
 import type { ImageProps, ImageSourcePropType, ViewStyle } from 'react-native';
 import { View } from 'react-native';
@@ -25,27 +25,46 @@ const ProgressiveImage: FC<IProgressiveImage> = ({
 }) => {
   const [isThumbnailLoaded, setIsThumbnailLoaded] = useState(false);
 
+  /**
+   * Value blur for thumbnail image
+   */
   const thumbnailAnimated = useSharedValue(0);
+
+  /**
+   * Value blur for default image
+   */
   const imageAnimated = useSharedValue(0);
 
+  /**
+   * Animated opacity for thumbnail image
+   */
   const animatedStyleThumbnail = useAnimatedStyle(() => ({
     opacity: withTiming(thumbnailAnimated.value, {
       easing: Easing.ease,
     }),
   }));
 
+  /**
+   * Animated opacity for default image
+   */
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: withTiming(imageAnimated.value, {
       easing: Easing.ease,
     }),
   }));
 
-  const onThumbnailLoad = () => {
+  /**
+   * Change state indicator for loading original image and change animated value
+   */
+  const onThumbnailLoad = useCallback(() => {
     thumbnailAnimated.value = 1;
     setIsThumbnailLoaded(true);
-  };
+  }, [setIsThumbnailLoaded, thumbnailAnimated.value]);
 
-  const onImageLoad = () => (imageAnimated.value = 1);
+  /**
+   * Change animated value to visible default image
+   */
+  const onImageLoad = useCallback(() => (imageAnimated.value = 1), [imageAnimated.value]);
 
   return (
     <View style={additionalContainerStyles}>
