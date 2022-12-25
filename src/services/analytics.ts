@@ -23,6 +23,7 @@ enum APP_EVENT {
 
 interface IAnalyticsParams {
   amplitudeToken: string;
+  isATT?: boolean;
   onTrackUser?: (
     user: Record<string, any>,
     params: {
@@ -75,6 +76,12 @@ class Analytics {
   private logger?: ILogType;
 
   /**
+   * Enable check app tracking transparency
+   * @protected
+   */
+  protected isATT = true;
+
+  /**
    * Extra user set callback
    * @protected
    */
@@ -90,11 +97,12 @@ class Analytics {
    * @constructor
    * @private
    */
-  private constructor({ amplitudeToken, onTrackUser, onTrackEvent }: IAnalyticsParams) {
+  private constructor({ amplitudeToken, isATT, onTrackUser, onTrackEvent }: IAnalyticsParams) {
     this.isDisabled = Config.get('isLocalDevelopment');
     this.isProd = Config.get('isProd', false)!;
     this.logger = Config.get('logger');
     this.amplitudeToken = amplitudeToken;
+    this.isATT = isATT ?? true;
     this.onTrackUser = onTrackUser;
     this.onTrackEvent = onTrackEvent;
   }
@@ -153,7 +161,7 @@ class Analytics {
    * @protected
    */
   protected async checkATT(): Promise<boolean> {
-    if (!isIOS) {
+    if (!isIOS || !this.isATT) {
       return true;
     }
 
