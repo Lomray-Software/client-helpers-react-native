@@ -42,7 +42,6 @@
     "react-i18next": "^11.16.2",
     "react-native-flash-message": "^0.2.1",
     "react-native-logs": "^4.0.1",
-    "react-native-reanimated": "^2.13.0",
     "react-native-uuid": "^2.0.1",
     "reactotron-react-native": "^5.0.3"
   },
@@ -99,6 +98,7 @@
     "react-native-navigation": ">=7.28.0",
     "react-native-tracking-transparency": "^0.1.2",
     "react-native-svg": "^12.5.0",
+    "react-native-reanimated": "^2.13.0",
     "yup": "^0.32.11"
   },
   "bundledDependencies": [
