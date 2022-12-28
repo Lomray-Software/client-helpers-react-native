@@ -83,7 +83,7 @@ class VersionCheck {
         return (result?.results?.[0]?.version as string) ?? null;
       }
     } catch (e) {
-      this.logger?.error('Failed get store version: ', e);
+      this.logger?.info('Failed get store version: ', e);
     }
 
     return null;
