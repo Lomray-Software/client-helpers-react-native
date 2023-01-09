@@ -13,6 +13,7 @@ export interface IFlatList<TEntity = Record<string, any>>
   emptyListText?: string;
   isFetching?: boolean;
   isFirstRender?: boolean;
+  totalEntities?: number;
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?: (() => Promise<void>) | FlatListProps<TEntity>['onRefresh'];
@@ -25,6 +26,7 @@ export interface IFlatList<TEntity = Record<string, any>>
 const FlatList = <T,>({
   EmptyComponent,
   data,
+  totalEntities = 0,
   isFetching = false,
   isFirstRender = false,
   initialNumToRender = 5,
@@ -46,7 +48,9 @@ const FlatList = <T,>({
           showsVerticalScrollIndicator={false}
           layout={Layout.duration(300)}
           ListFooterComponent={
-            (length > initialNumToRender && <Footer hasRows={hasRows} isFetching={isFetching} />) ||
+            (totalEntities > initialNumToRender && (
+              <Footer hasRows={hasRows} isFetching={isFetching} />
+            )) ||
             undefined
           }
           ListEmptyComponent={
