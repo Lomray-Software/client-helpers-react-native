@@ -54,7 +54,7 @@
     "@lomray/prettier-config": "^1.2.0",
     "@rollup/plugin-json": "^4.1.0",
     "@types/lodash": "^4.14.182",
-    "@types/react": "^17.0.50",
+    "@types/react": "17.0.43",
     "@types/react-native": "^0.67.3",
     "@zerollup/ts-transform-paths": "^1.7.18",
     "eslint": "8.21.0",
@@ -96,10 +96,14 @@
     "react-native-localize": "^2.2.1",
     "react-native-mixed-splash": "^1.0.0",
     "react-native-navigation": ">=7.28.0",
-    "react-native-tracking-transparency": "^0.1.2",
-    "react-native-svg": "^12.5.0",
     "react-native-reanimated": "^2.13.0",
+    "react-native-svg": "^12.5.0",
+    "react-native-tracking-transparency": "^0.1.2",
+    "react-native-webview": "^11.26.0",
     "yup": "^0.32.11"
+  },
+  "resolutions": {
+    "@types/react": "^17"
   },
   "bundledDependencies": [
     "tslib"
