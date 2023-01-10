@@ -1,9 +1,10 @@
 import type { ComponentType, ReactElement } from 'react';
 import React from 'react';
-import type { FlatListProps } from 'react-native';
+import type { FlatListProps, ImageSourcePropType } from 'react-native';
 import type { AnimateProps } from 'react-native-reanimated';
 // eslint-disable-next-line import/default
 import Animated, { Layout, FadeIn } from 'react-native-reanimated';
+import Placeholder from '../placeholders/frame';
 import Empty from './empty';
 import Footer from './footer';
 
@@ -11,9 +12,10 @@ export interface IFlatList<TEntity = Record<string, any>>
   extends AnimateProps<FlatListProps<TEntity>> {
   emptyListTitle?: string;
   emptyListText?: string;
+  emptyListImg?: ImageSourcePropType;
+  totalEntities?: number;
   isFetching?: boolean;
   isFirstRender?: boolean;
-  totalEntities?: number;
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?: (() => Promise<void>) | FlatListProps<TEntity>['onRefresh'];
@@ -24,8 +26,12 @@ export interface IFlatList<TEntity = Record<string, any>>
  * Flat list wrapper
  */
 const FlatList = <T,>({
-  EmptyComponent,
   data,
+  EmptyComponent,
+  PlaceholderComponent,
+  emptyListTitle,
+  emptyListText,
+  emptyListImg,
   totalEntities = 0,
   isFetching = false,
   isFirstRender = false,
@@ -38,6 +44,12 @@ const FlatList = <T,>({
 
   return (
     <>
+      <Placeholder
+        isFetching={isFetching}
+        isFirstRender={isFirstRender}
+        PlaceholderComponent={PlaceholderComponent}
+        count={initialNumToRender as number}
+      />
       {!isFirstRender && (
         <Animated.FlatList<T>
           entering={FadeIn}
@@ -55,7 +67,15 @@ const FlatList = <T,>({
           }
           ListEmptyComponent={
             EmptyComponent ||
-            (EmptyComponent !== false && <Empty hasRows={hasRows} isFetching={isFetching} />) ||
+            (EmptyComponent !== false && (
+              <Empty
+                hasRows={hasRows}
+                isFetching={isFetching}
+                title={emptyListTitle}
+                text={emptyListText}
+                Img={emptyListImg}
+              />
+            )) ||
             undefined
           }
           {...props}

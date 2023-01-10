@@ -61,7 +61,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   /**
    * @constructor
    */
-  constructor({ getEntities, pageSize = 5, keyName = 'id' }: IFlatListStoreParams<TEntity>) {
+  constructor({ getEntities, pageSize = 10, keyName = 'id' }: IFlatListStoreParams<TEntity>) {
     this.getEntities = this.wrapRequest(getEntities);
     this.pageSize = pageSize;
     this.keyName = keyName;
