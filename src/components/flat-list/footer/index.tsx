@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
+import Loader from '../../loader';
 
 interface IFooter {
   hasRows: boolean;
@@ -12,6 +12,6 @@ interface IFooter {
  * @constructor
  */
 const Footer: FC<IFooter> = ({ hasRows, isFetching }) =>
-  isFetching && hasRows ? <ActivityIndicator /> : null;
+  isFetching && hasRows ? <Loader /> : null;
 
 export default Footer;

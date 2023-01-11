@@ -161,6 +161,10 @@ const initLogger = ({ grafana, crashlytics, params = {} }: ILoggerOptions): ILog
   // extend log for adding some payload
   log.setPayload = setPayload;
 
+  if (!Config.get('logger')) {
+    Config.setup({ logger: log });
+  }
+
   return log;
 };
 

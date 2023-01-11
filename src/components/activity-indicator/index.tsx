@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import { ActivityIndicator as Indicator, SafeAreaView } from 'react-native';
+import Config from '../../services/config';
 import styles from './styles';
 
 interface IActivityIndicator {
@@ -15,7 +16,7 @@ interface IActivityIndicator {
  */
 const ActivityIndicator: FC<IActivityIndicator> = ({
   isFetching = false,
-  color = '#FFFFFF',
+  color,
   size = 'large',
   isTransparent = false,
 }) => {
@@ -23,11 +24,13 @@ const ActivityIndicator: FC<IActivityIndicator> = ({
     return null;
   }
 
+  const usedColor = color ?? Config.get('indicators')?.activity?.color;
+
   return (
     <SafeAreaView
       style={[styles.wrapperIndicator, isTransparent && styles.wrapperIndicatorTransparent]}
     >
-      <Indicator style={styles.indicator} color={color} size={size} />
+      <Indicator style={styles.indicator} color={usedColor} size={size} />
     </SafeAreaView>
   );
 };

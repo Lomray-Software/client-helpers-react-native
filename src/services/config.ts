@@ -12,6 +12,7 @@ export interface IConfigParams {
   isProd?: boolean;
   appKeyName?: string;
   appBranch?: string;
+  packageName?: string;
   topFlashMessage?: {
     colors?: {
       error: string;
@@ -30,6 +31,14 @@ export interface IConfigParams {
     prod?: {
       ios: string;
       android: string;
+    };
+  };
+  indicators?: {
+    activity?: {
+      color: string;
+    };
+    loader?: {
+      color: string;
     };
   };
 }
@@ -58,6 +67,14 @@ class Config {
     hapticFeedbackOptions: {
       enableVibrateFallback: false,
       ignoreAndroidSystemSettings: true,
+    },
+    indicators: {
+      activity: {
+        color: '#FFFFFF',
+      },
+      loader: {
+        color: '#FFFFFF',
+      },
     },
   };
 
