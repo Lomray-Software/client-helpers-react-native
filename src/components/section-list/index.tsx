@@ -18,14 +18,14 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
   isFetching?: boolean;
   isFirstRender?: boolean;
   placeholderCount?: number;
-  placeholderContainerStyle?: Animated.AnimateProps<never>['style'];
+  placeholderContainerStyle?: Animated.AnimateProps<any>['style'];
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
-    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onRefresh']>, Promise<void>>
+    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onRefresh']>, Promise<any>>
     | SectionListProps<TEntity>['onRefresh'];
   onEndReached?:
-    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onEndReached']>, Promise<void>>
+    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onEndReached']>, Promise<any>>
     | SectionListProps<TEntity>['onEndReached'];
 }
 

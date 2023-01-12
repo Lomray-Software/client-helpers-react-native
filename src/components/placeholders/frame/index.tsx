@@ -7,7 +7,7 @@ interface IPlaceholder {
   isFetching: boolean;
   isFirstRender?: boolean | null;
   count?: number;
-  containerStyle?: Animated.AnimateProps<never>['style'];
+  containerStyle?: Animated.AnimateProps<any>['style'];
   PlaceholderComponent?: ReactElement | ComponentType;
 }
 

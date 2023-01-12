@@ -19,14 +19,14 @@ export interface IFlatList<TEntity = Record<string, any>>
   isFetching?: boolean;
   isFirstRender?: boolean;
   placeholderCount?: number;
-  placeholderContainerStyle?: Animated.AnimateProps<never>['style'];
+  placeholderContainerStyle?: Animated.AnimateProps<any>['style'];
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
-    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onRefresh']>, Promise<void>>
+    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onRefresh']>, Promise<any>>
     | FlatListProps<TEntity>['onRefresh'];
   onEndReached?:
-    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onEndReached']>, Promise<void>>
+    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onEndReached']>, Promise<any>>
     | FlatListProps<TEntity>['onEndReached'];
 }
 
