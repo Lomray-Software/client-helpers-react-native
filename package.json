@@ -36,7 +36,7 @@
   "dependencies": {
     "@babel/runtime": "^7.19.0",
     "@lomray/react-native-layout-helper": "^1.0.3",
-    "@lomray/reactotron-mobx-store-manager": "^1.0.0",
+    "@lomray/reactotron-mobx-store-manager": "^1.0.1",
     "atomic-batcher": "^1.0.2",
     "i18next": "^21.6.14",
     "react-i18next": "^11.16.2",
