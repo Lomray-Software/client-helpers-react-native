@@ -31,7 +31,7 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
  * Section list wrapper
  */
 const SectionList = <T,>({
-  data,
+  sections,
   EmptyComponent,
   PlaceholderComponent,
   emptyListTitle,
@@ -47,10 +47,7 @@ const SectionList = <T,>({
   initialNumToRender = 5,
   ...props
 }: ISectionList<T>) => {
-  const length =
-    data instanceof Animated.Node ? data?.[' __value']?.length ?? 0 : data?.length ?? 0;
-  const hasRows = length > 0;
-
+  const hasRows = (sections?.length ?? 0) > 0;
   const onEndReachedCalledDuringMomentum = useRef(true);
 
   /**
@@ -96,7 +93,7 @@ const SectionList = <T,>({
       {!isFirstRender && (
         <Animated.View entering={FadeIn} layout={Layout.duration(300)}>
           <DefaultSectionList<T>
-            data={data}
+            sections={sections}
             refreshing={isFetching}
             initialNumToRender={initialNumToRender}
             onEndReachedThreshold={0.5}
