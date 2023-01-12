@@ -3,6 +3,7 @@ import _ from 'lodash';
 import type { ComponentType, ReactElement } from 'react';
 import React, { useCallback, useRef } from 'react';
 import type { ImageSourcePropType, SectionListProps } from 'react-native';
+import { SectionList as DefaultSectionList } from 'react-native';
 // eslint-disable-next-line import/default
 import Animated, { Layout, FadeIn } from 'react-native-reanimated';
 import Empty from '../flat-list/empty';
@@ -16,6 +17,8 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
   totalEntities?: number;
   isFetching?: boolean;
   isFirstRender?: boolean;
+  placeholderCount?: number;
+  placeholderContainerStyle?: Animated.AnimateProps<never>['style'];
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
@@ -37,6 +40,8 @@ const SectionList = <T,>({
   emptyListText,
   emptyListImg,
   onEndReached,
+  placeholderCount,
+  placeholderContainerStyle,
   totalEntities = 0,
   isFetching = false,
   isFirstRender = false,
@@ -78,14 +83,15 @@ const SectionList = <T,>({
   return (
     <>
       <Placeholder
+        count={placeholderCount ?? initialNumToRender}
         isFetching={isFetching}
         isFirstRender={isFirstRender}
+        containerStyle={placeholderContainerStyle}
         PlaceholderComponent={PlaceholderComponent}
-        count={initialNumToRender}
       />
       {!isFirstRender && (
         <Animated.View entering={FadeIn} layout={Layout.duration(300)}>
-          <SectionList<T>
+          <DefaultSectionList<T>
             data={data}
             refreshing={isFetching}
             initialNumToRender={initialNumToRender}

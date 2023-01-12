@@ -17,7 +17,7 @@ export default {
     preserveModulesRoot: 'src',
     exports: 'auto',
   },
-  external: ['axios', 'lodash'],
+  external: ['axios', 'lodash', 'react', 'react-native', 'mobx', 'reactotron-core-client'],
   plugins: [
     folderInput(),
     typescript({

@@ -7,6 +7,7 @@ interface IPlaceholder {
   isFetching: boolean;
   isFirstRender?: boolean | null;
   count?: number;
+  containerStyle?: Animated.AnimateProps<never>['style'];
   PlaceholderComponent?: ReactElement | ComponentType;
 }
 
@@ -21,6 +22,7 @@ const Frame: FC<IPlaceholder> = ({
   isFetching,
   PlaceholderComponent,
   children,
+  containerStyle,
   isFirstRender = null,
   count = 1,
 }) => (
@@ -28,7 +30,7 @@ const Frame: FC<IPlaceholder> = ({
     {(isFirstRender === null || isFirstRender === true) &&
       isFetching &&
       PlaceholderComponent !== undefined && (
-        <Animated.View exiting={FadeOut}>
+        <Animated.View exiting={FadeOut} style={containerStyle}>
           {[...Array(count)].map((_, i) => (
             <React.Fragment key={i}>
               {React.isValidElement(PlaceholderComponent) ? (
@@ -41,7 +43,11 @@ const Frame: FC<IPlaceholder> = ({
         </Animated.View>
       )}
     {(isFirstRender === false || (isFirstRender === null && !isFetching)) &&
-      children !== undefined && <Animated.View entering={FadeIn}>{children}</Animated.View>}
+      children !== undefined && (
+        <Animated.View entering={FadeIn} style={containerStyle}>
+          {children}
+        </Animated.View>
+      )}
   </>
 );
 

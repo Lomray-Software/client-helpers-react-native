@@ -18,6 +18,8 @@ export interface IFlatList<TEntity = Record<string, any>>
   totalEntities?: number;
   isFetching?: boolean;
   isFirstRender?: boolean;
+  placeholderCount?: number;
+  placeholderContainerStyle?: Animated.AnimateProps<never>['style'];
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
@@ -39,6 +41,8 @@ const FlatList = <T,>({
   emptyListText,
   emptyListImg,
   onEndReached,
+  placeholderCount,
+  placeholderContainerStyle,
   totalEntities = 0,
   isFetching = false,
   isFirstRender = false,
@@ -80,10 +84,11 @@ const FlatList = <T,>({
   return (
     <>
       <Placeholder
+        count={placeholderCount ?? (initialNumToRender as number)}
         isFetching={isFetching}
         isFirstRender={isFirstRender}
+        containerStyle={placeholderContainerStyle}
         PlaceholderComponent={PlaceholderComponent}
-        count={initialNumToRender as number}
       />
       {!isFirstRender && (
         <Animated.FlatList<T>
