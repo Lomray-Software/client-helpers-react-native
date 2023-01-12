@@ -25,9 +25,8 @@ export interface IFlatList<TEntity = Record<string, any>>
   onRefresh?:
     | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onRefresh']>, Promise<any>>
     | FlatListProps<TEntity>['onRefresh'];
-  onEndReached?:
-    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onEndReached']>, Promise<any>>
-    | FlatListProps<TEntity>['onEndReached'];
+  onEndReached?: FlatListProps<TEntity>['onEndReached'];
+  onEndReachedAsync?: () => Promise<any>;
 }
 
 /**
@@ -41,6 +40,7 @@ const FlatList = <T,>({
   emptyListText,
   emptyListImg,
   onEndReached,
+  onEndReachedAsync,
   placeholderCount,
   placeholderContainerStyle,
   totalEntities = 0,
@@ -72,7 +72,12 @@ const FlatList = <T,>({
       (params: Parameters<NonNullable<FlatListProps<never>['onEndReached']>>[0]) => {
         if (!onEndReachedCalledDuringMomentum.current && onEndReached) {
           onEndReachedCalledDuringMomentum.current = true;
-          void onEndReached(params);
+
+          if (onEndReachedAsync) {
+            void onEndReachedAsync();
+          } else if (onEndReached) {
+            onEndReached(params);
+          }
         }
       },
       1000,

@@ -24,9 +24,7 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
   onRefresh?:
     | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onRefresh']>, Promise<any>>
     | SectionListProps<TEntity>['onRefresh'];
-  onEndReached?:
-    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onEndReached']>, Promise<any>>
-    | SectionListProps<TEntity>['onEndReached'];
+  onEndReachedAsync?: () => Promise<any>;
 }
 
 /**
@@ -40,6 +38,7 @@ const SectionList = <T,>({
   emptyListText,
   emptyListImg,
   onEndReached,
+  onEndReachedAsync,
   placeholderCount,
   placeholderContainerStyle,
   totalEntities = 0,
@@ -69,9 +68,14 @@ const SectionList = <T,>({
   const onEndReachedThrottled = useCallback(
     _.throttle(
       (params: Parameters<NonNullable<SectionListProps<never>['onEndReached']>>[0]) => {
-        if (!onEndReachedCalledDuringMomentum.current && onEndReached) {
+        if (!onEndReachedCalledDuringMomentum.current && (onEndReached || onEndReachedAsync)) {
           onEndReachedCalledDuringMomentum.current = true;
-          void onEndReached(params);
+
+          if (onEndReachedAsync) {
+            void onEndReachedAsync();
+          } else if (onEndReached) {
+            onEndReached(params);
+          }
         }
       },
       1000,
