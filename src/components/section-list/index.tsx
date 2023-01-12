@@ -2,16 +2,14 @@ import type { ReplaceReturnType } from '@lomray/client-helpers/interfaces';
 import _ from 'lodash';
 import type { ComponentType, ReactElement } from 'react';
 import React, { useCallback, useRef } from 'react';
-import type { FlatListProps, ImageSourcePropType } from 'react-native';
-import type { AnimateProps } from 'react-native-reanimated';
+import type { ImageSourcePropType, SectionListProps } from 'react-native';
 // eslint-disable-next-line import/default
 import Animated, { Layout, FadeIn } from 'react-native-reanimated';
+import Empty from '../flat-list/empty';
+import Footer from '../flat-list/footer';
 import Placeholder from '../placeholders/frame';
-import Empty from './empty';
-import Footer from './footer';
 
-export interface IFlatList<TEntity = Record<string, any>>
-  extends AnimateProps<FlatListProps<TEntity>> {
+export interface ISectionList<TEntity = Record<string, any>> extends SectionListProps<TEntity> {
   emptyListTitle?: string;
   emptyListText?: string;
   emptyListImg?: ImageSourcePropType;
@@ -21,17 +19,17 @@ export interface IFlatList<TEntity = Record<string, any>>
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
-    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onRefresh']>, Promise<void>>
-    | FlatListProps<TEntity>['onRefresh'];
+    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onRefresh']>, Promise<void>>
+    | SectionListProps<TEntity>['onRefresh'];
   onEndReached?:
-    | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onEndReached']>, Promise<void>>
-    | FlatListProps<TEntity>['onEndReached'];
+    | ReplaceReturnType<NonNullable<SectionListProps<TEntity>['onEndReached']>, Promise<void>>
+    | SectionListProps<TEntity>['onEndReached'];
 }
 
 /**
- * Flat list wrapper
+ * Section list wrapper
  */
-const FlatList = <T,>({
+const SectionList = <T,>({
   data,
   EmptyComponent,
   PlaceholderComponent,
@@ -44,7 +42,7 @@ const FlatList = <T,>({
   isFirstRender = false,
   initialNumToRender = 5,
   ...props
-}: IFlatList<T>) => {
+}: ISectionList<T>) => {
   const length =
     data instanceof Animated.Node ? data?.[' __value']?.length ?? 0 : data?.length ?? 0;
   const hasRows = length > 0;
@@ -65,7 +63,7 @@ const FlatList = <T,>({
    */
   const onEndReachedThrottled = useCallback(
     _.throttle(
-      (params: Parameters<NonNullable<FlatListProps<never>['onEndReached']>>[0]) => {
+      (params: Parameters<NonNullable<SectionListProps<never>['onEndReached']>>[0]) => {
         if (!onEndReachedCalledDuringMomentum.current && onEndReached) {
           onEndReachedCalledDuringMomentum.current = true;
           void onEndReached(params);
@@ -83,43 +81,43 @@ const FlatList = <T,>({
         isFetching={isFetching}
         isFirstRender={isFirstRender}
         PlaceholderComponent={PlaceholderComponent}
-        count={initialNumToRender as number}
+        count={initialNumToRender}
       />
       {!isFirstRender && (
-        <Animated.FlatList<T>
-          entering={FadeIn}
-          data={data}
-          refreshing={isFetching}
-          initialNumToRender={initialNumToRender}
-          onEndReachedThreshold={0.5}
-          showsVerticalScrollIndicator={false}
-          layout={Layout.duration(300)}
-          onMomentumScrollBegin={onMomentumScrollBegin}
-          onEndReached={onEndReachedThrottled}
-          ListFooterComponent={
-            (totalEntities > initialNumToRender && (
-              <Footer hasRows={hasRows} isFetching={isFetching} />
-            )) ||
-            undefined
-          }
-          ListEmptyComponent={
-            EmptyComponent ||
-            (EmptyComponent !== false && (
-              <Empty
-                hasRows={hasRows}
-                isFetching={isFetching}
-                title={emptyListTitle}
-                text={emptyListText}
-                Img={emptyListImg}
-              />
-            )) ||
-            undefined
-          }
-          {...props}
-        />
+        <Animated.View entering={FadeIn} layout={Layout.duration(300)}>
+          <SectionList<T>
+            data={data}
+            refreshing={isFetching}
+            initialNumToRender={initialNumToRender}
+            onEndReachedThreshold={0.5}
+            showsVerticalScrollIndicator={false}
+            onMomentumScrollBegin={onMomentumScrollBegin}
+            onEndReached={onEndReachedThrottled}
+            ListFooterComponent={
+              (totalEntities > initialNumToRender && (
+                <Footer hasRows={hasRows} isFetching={isFetching} />
+              )) ||
+              undefined
+            }
+            ListEmptyComponent={
+              EmptyComponent ||
+              (EmptyComponent !== false && (
+                <Empty
+                  hasRows={hasRows}
+                  isFetching={isFetching}
+                  title={emptyListTitle}
+                  text={emptyListText}
+                  Img={emptyListImg}
+                />
+              )) ||
+              undefined
+            }
+            {...props}
+          />
+        </Animated.View>
       )}
     </>
   );
 };
 
-export default FlatList;
+export default SectionList;
