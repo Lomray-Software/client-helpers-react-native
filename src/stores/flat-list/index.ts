@@ -4,6 +4,18 @@ import { action, makeObservable, observable } from 'mobx';
 export type IRequestReturn<TEntity> = { count: number; list: TEntity[]; page: number } | undefined;
 
 interface IFlatListStoreParams<TEntity> {
+  /**
+   * Initial entities
+   */
+  entities?: TEntity[];
+  /**
+   * Initial total entities
+   */
+  totalEntities?: number;
+  /**
+   * Initial page
+   */
+  initPage?: number;
   getEntities: (page?: number) => Promise<IRequestReturn<TEntity>>;
   keyName?: string;
   pageSize?: number;
@@ -44,7 +56,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
    * Default page size
    * @private
    */
-  public pageSize: number;
+  public pageSize = 10;
 
   /**
    * Key extractor property name
@@ -61,8 +73,18 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   /**
    * @constructor
    */
-  constructor({ getEntities, pageSize = 10, keyName = 'id' }: IFlatListStoreParams<TEntity>) {
+  constructor({
+    getEntities,
+    entities,
+    totalEntities = 0,
+    initPage = 1,
+    pageSize = 10,
+    keyName = 'id',
+  }: IFlatListStoreParams<TEntity>) {
     this.getEntities = this.wrapRequest(getEntities);
+    this.entities = entities ?? [];
+    this.totalEntities = totalEntities;
+    this.currentPage = initPage;
     this.pageSize = pageSize;
     this.keyName = keyName;
 
