@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 
 export type IRequestReturn<TEntity> = { count: number; list: TEntity[]; page: number } | undefined;
 
@@ -114,7 +114,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
    */
   public setEntities(entities: TEntity[], shouldAdd = false) {
     if (shouldAdd) {
-      this.entities = _.uniqBy([...this.entities, ...entities], 'id');
+      this.entities = _.uniqBy([...this.entities, ...entities], this.keyName);
     } else {
       this.entities = entities;
     }
@@ -131,17 +131,19 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
 
       const result = await callback(pageVal);
 
-      this.setFetching(false);
+      runInAction(() => {
+        this.setFetching(false);
 
-      if (result === undefined) {
-        return;
-      }
+        if (result === undefined) {
+          return;
+        }
 
-      const { list, count, page } = result;
+        const { list, count, page } = result;
 
-      this.currentPage = page;
-      this.setTotalCountEntities(count);
-      this.setEntities(list, page > 1);
+        this.currentPage = page;
+        this.setTotalCountEntities(count);
+        this.setEntities(list, page > 1);
+      });
 
       return result;
     };
