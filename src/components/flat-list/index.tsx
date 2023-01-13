@@ -70,7 +70,7 @@ const FlatList = <T,>({
   const onEndReachedThrottled = useCallback(
     _.throttle(
       (params: Parameters<NonNullable<FlatListProps<never>['onEndReached']>>[0]) => {
-        if (!onEndReachedCalledDuringMomentum.current && onEndReached) {
+        if (!onEndReachedCalledDuringMomentum.current && (onEndReached || onEndReachedAsync)) {
           onEndReachedCalledDuringMomentum.current = true;
 
           if (onEndReachedAsync) {
