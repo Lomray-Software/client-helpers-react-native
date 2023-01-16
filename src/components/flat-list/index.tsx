@@ -104,7 +104,7 @@ const FlatList = <T,>({
           onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
           layout={Layout.duration(300)}
-          onMomentumScrollBegin={onMomentumScrollBegin}
+          onScrollBeginDrag={onMomentumScrollBegin}
           onEndReached={onEndReachedThrottled}
           ListFooterComponent={
             (totalEntities > initialNumToRender && (

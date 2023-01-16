@@ -98,7 +98,7 @@ const SectionList = <T,>({
             initialNumToRender={initialNumToRender}
             onEndReachedThreshold={0.5}
             showsVerticalScrollIndicator={false}
-            onMomentumScrollBegin={onMomentumScrollBegin}
+            onScrollBeginDrag={onMomentumScrollBegin}
             onEndReached={onEndReachedThrottled}
             ListFooterComponent={
               (totalEntities > initialNumToRender && (
