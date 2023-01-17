@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  imageOverlay: {
+  overlay: {
     zIndex: 1,
     position: 'absolute',
     left: 0,
