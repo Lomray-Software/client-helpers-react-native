@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import type { ActivityIndicatorProps, ImageProps, ImageSourcePropType } from 'react-native';
 import { Animated } from 'react-native';
@@ -63,17 +63,22 @@ const ProgressiveImage: FC<IProgressiveImage> = ({
   const [hasPassedDelay, setHasPassedDelay] = useState(false);
   const [sourceAnim] = useState(new Animated.Value(0));
   const [thumbnailAnim] = useState(new Animated.Value(0));
+  const timerProgressId = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
+    if (!hasProgress) {
+      return;
+    }
+
     /**
      * Delay showing the progress
      */
-    const timerId = setTimeout(() => {
+    timerProgressId.current = setTimeout(() => {
       setHasPassedDelay(true);
     }, 2000);
 
     return () => {
-      clearTimeout(timerId);
+      clearTimeout(timerProgressId.current);
     };
   }, []);
 
@@ -118,6 +123,7 @@ const ProgressiveImage: FC<IProgressiveImage> = ({
       toValue: 1,
       useNativeDriver: false,
     }).start(() => {
+      clearTimeout(timerProgressId.current);
       setIsSourceLoaded(true);
     });
   };
