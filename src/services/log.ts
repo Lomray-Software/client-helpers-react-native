@@ -8,6 +8,7 @@ import Config from './config';
 type TLogger = ReturnType<typeof logger['createLogger']>;
 
 export interface ILogType extends TLogger {
+  // @ts-ignore
   payload: Record<string, any>;
   setPayload(key: string, value: string): void;
 }
