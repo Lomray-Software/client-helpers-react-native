@@ -5,7 +5,7 @@ import { logger, consoleTransport } from 'react-native-logs';
 import uuid from 'react-native-uuid';
 import Config from './config';
 
-type TLogger = ReturnType<typeof logger['createLogger']>;
+type TLogger = ReturnType<(typeof logger)['createLogger']>;
 
 export interface ILogType extends TLogger {
   // @ts-ignore

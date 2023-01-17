@@ -6,7 +6,7 @@ import { NativeModules } from 'react-native';
  * NOTE: only android
  */
 const getNavigationBarDimension = (): ReturnType<
-  typeof NativeModules['CommonModule']['getNavigationBarDimension']
+  (typeof NativeModules)['CommonModule']['getNavigationBarDimension']
 > => {
   if (!isAndroid) {
     return Promise.resolve({});

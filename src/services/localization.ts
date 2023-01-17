@@ -55,7 +55,7 @@ customI18n.setDefaultLanguage = (): boolean | Promise<TFunction> => {
   return customI18n.setLanguage(language);
 };
 
-const originalInit: typeof i18n['init'] = i18n.init.bind(i18n);
+const originalInit: (typeof i18n)['init'] = i18n.init.bind(i18n);
 const customInit = (options: InitOptions, callback?: Callback): Promise<TFunction> => {
   customI18n.use(initReactI18next);
 
