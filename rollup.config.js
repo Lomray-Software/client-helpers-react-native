@@ -60,6 +60,7 @@ export default {
     copy({
       targets: [
         { src: 'typings/**/*', dest: 'lib/typings' },
+        { src: 'src/scripts/**/*', dest: 'lib/scripts' },
         { src: 'package.json', dest: 'lib' },
       ]
     })

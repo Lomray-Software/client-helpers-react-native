@@ -108,5 +108,8 @@
   },
   "bundledDependencies": [
     "tslib"
-  ]
+  ],
+  "bin": {
+    "generate-release-config": "scripts/release-info.js"
+  }
 }
