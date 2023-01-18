@@ -83,6 +83,12 @@ class Analytics {
   protected isATT = true;
 
   /**
+   * ATT status
+   * @protected
+   */
+  protected hasAllowATT: boolean | null = null;
+
+  /**
    * Extra user set callback
    * @protected
    */
@@ -132,6 +138,13 @@ class Analytics {
   }
 
   /**
+   * Get ATT status
+   */
+  public getATTStatus(): boolean | null {
+    return this.hasAllowATT;
+  }
+
+  /**
    * Initialize analytics, show permission modals
    * @protected
    */
@@ -173,16 +186,18 @@ class Analytics {
       status = await requestTrackingPermission();
     }
 
+    this.hasAllowATT = status === 'unavailable' || status === 'authorized';
+
     this.logger?.info('App tracking transparency status: ', status);
 
-    return status === 'unavailable' || status === 'authorized';
+    return this.hasAllowATT;
   }
 
   /**
    * @protected
    */
   protected setUser(user: Record<string, any>): void {
-    if (this.isDisabled) {
+    if (this.isDisabled || !this.isATT) {
       return;
     }
 
