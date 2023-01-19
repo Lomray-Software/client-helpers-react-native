@@ -17,7 +17,7 @@ export default {
     preserveModulesRoot: 'src',
     exports: 'auto',
   },
-  external: ['axios', 'lodash', 'react', 'react-native', 'mobx', 'reactotron-core-client'],
+  external: ['axios', 'lodash', 'react', 'react-native', 'mobx', 'reactotron-core-client', '@lomray/react-mobx-manager'],
   plugins: [
     folderInput(),
     typescript({
