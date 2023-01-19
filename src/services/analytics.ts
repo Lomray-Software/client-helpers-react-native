@@ -3,6 +3,7 @@ import { isIOS } from '@lomray/react-native-layout-helper';
 import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import { Settings, AppEventsLogger } from 'react-native-fbsdk-next';
 import { getTrackingStatus, requestTrackingPermission } from 'react-native-tracking-transparency';
@@ -32,7 +33,7 @@ interface IAnalyticsParams {
       google: FirebaseAnalyticsTypes.Module;
       fb: typeof AppEventsLogger;
     },
-  ) => void;
+  ) => boolean;
   onTrackEvent?: (
     eventName: string,
     props: Record<string, any>,
@@ -212,12 +213,35 @@ class Analytics {
         return;
       }
 
-      const userId = user.id as string;
+      const { id, ...properties } = user;
+
+      const userId = id as string;
       const identify = new Identify();
 
-      this.onTrackUser?.(user, { amplitude: identify, google: analytics(), fb: AppEventsLogger });
-      // void analytics().setUserProperties({ someProperty: 'value '});
-      // AppEventsLogger.setUserData({ dateOfBirth: birthDay, email, phone });
+      const shouldSkip = this.onTrackUser?.(user, {
+        amplitude: identify,
+        google: analytics(),
+        fb: AppEventsLogger,
+      });
+
+      if (!shouldSkip) {
+        void analytics().setUserProperties(properties);
+        void Amplitude.setUserProperties(properties);
+        AppEventsLogger.setUserData(
+          _.pick(properties, [
+            'email',
+            'firstName',
+            'lastName',
+            'phone',
+            'dateOfBirth',
+            'gender',
+            'city',
+            'state',
+            'zip',
+            'country',
+          ]),
+        );
+      }
 
       void Amplitude.setUserId(userId);
       void Amplitude.identify(identify);
