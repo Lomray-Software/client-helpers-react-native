@@ -1,3 +1,10 @@
+interface ITabsInfo {
+  [tabIndex: number]: {
+    componentId: string;
+    componentName: string;
+  };
+}
+
 /**
  * Navigation service
  */
@@ -15,10 +22,16 @@ class Navigation {
   private componentName: string;
 
   /**
+   * Component id and name by tab
+   * @private
+   */
+  private tabsInfo: ITabsInfo = {};
+
+  /**
    * Current bottom tab number
    * @private
    */
-  private bottomTabId: number;
+  private bottomTabId = 0;
 
   /**
    * Previous bottom tab number
@@ -32,14 +45,15 @@ class Navigation {
   public setComponentInfo(componentId: string, componentName: string): void {
     this.componentId = componentId;
     this.componentName = componentName;
+    this.tabsInfo[this.bottomTabId] = { componentId, componentName };
   }
 
   /**
    * Update bottom tab info
    */
-  public setBottomTabInfo(bottomTabId: number, prevBottomTabId: number): void {
+  public setBottomTabInfo(bottomTabId: number, prevBottomTabId?: number): void {
+    this.prevBottomTabId = prevBottomTabId ?? this.bottomTabId;
     this.bottomTabId = bottomTabId;
-    this.prevBottomTabId = prevBottomTabId;
   }
 
   /**
@@ -47,6 +61,13 @@ class Navigation {
    */
   public getComponentId(): string {
     return this.componentId;
+  }
+
+  /**
+   * Get current component id for tab
+   */
+  public getTabComponentId(bottomTabId?: number): string | undefined {
+    return this.tabsInfo[bottomTabId ?? this.bottomTabId]?.componentId;
   }
 
   /**
