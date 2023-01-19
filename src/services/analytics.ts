@@ -105,7 +105,7 @@ class Analytics {
    * @private
    */
   private constructor({ amplitudeToken, isATT, onTrackUser, onTrackEvent }: IAnalyticsParams) {
-    this.isDisabled = Config.get('isLocalDevelopment');
+    this.isDisabled = !Config.get('isProdDeployment');
     this.isProd = Config.get('isProd', false)!;
     this.logger = Config.get('logger');
     this.amplitudeToken = amplitudeToken;

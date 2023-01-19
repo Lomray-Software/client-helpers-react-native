@@ -10,7 +10,7 @@ import VersionCheck from '../services/version-check';
  */
 const checkNewVersion = _.debounce(
   () => {
-    const isDev = Config.get('isLocalDevelopment');
+    const isDev = !Config.get('isProdDeployment');
     const packageName = Config.get('packageName');
     const logger = Config.get('logger');
 

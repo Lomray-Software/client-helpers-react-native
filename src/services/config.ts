@@ -10,6 +10,7 @@ export interface IConfigParams {
   isLocalDevelopment?: boolean;
   isTests?: boolean;
   isProd?: boolean;
+  isProdDeployment?: boolean;
   appKeyName?: string;
   appBranch?: string;
   packageName?: string;
@@ -55,6 +56,7 @@ class Config {
     isLocalDevelopment: false,
     isTests: false,
     isProd: false,
+    isProdDeployment: false,
     appKeyName: 'unknown',
     topFlashMessage: {
       colors: {
