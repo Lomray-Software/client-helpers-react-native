@@ -157,6 +157,7 @@ class Analytics {
     const Amplitude = AmplitudeDefault.getInstance();
 
     void Amplitude.init(this.amplitudeToken);
+    Settings.initializeSDK();
 
     // Enable analytic collection only for production
     void this.checkATT().then((result) => {
@@ -164,7 +165,6 @@ class Analytics {
         return;
       }
 
-      Settings.initializeSDK();
       void Settings.setAdvertiserTrackingEnabled(true);
       void analytics().setAnalyticsCollectionEnabled(this.isProd);
       void Amplitude.setDeviceId(DeviceInfo.getUniqueId());
