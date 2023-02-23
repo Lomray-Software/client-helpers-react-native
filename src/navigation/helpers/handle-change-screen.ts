@@ -2,7 +2,6 @@ import { Navigation } from 'react-native-navigation';
 import type { ComponentDidAppearEvent } from 'react-native-navigation';
 import Config from '../../services/config';
 import NavigationService from '../../services/navigation';
-import StatusBarProcessor from './status-bar-processor';
 
 enum EventScreen {
   overlay = 'overlay',
@@ -36,7 +35,6 @@ const HandleChangeScreen = ({
     if (hiddenOverlays.includes(componentName)) {
       // Overlay change
       NavigationService.setOverlayInfo(componentId, componentName);
-      StatusBarProcessor.attach();
       logger?.info(`View overlay: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.overlay, params);
 
