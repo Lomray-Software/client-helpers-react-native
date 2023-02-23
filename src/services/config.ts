@@ -89,7 +89,7 @@ class Config {
    * Set config
    */
   setup(params: IConfigParams): void {
-    this.params = _.merge(this.params, params);
+    this.params = _.merge(this.params ?? {}, params ?? {});
     this.isSetup = true;
   }
 
@@ -104,7 +104,7 @@ class Config {
       console.warn("Don't try get config value before setup (Config.get).");
     }
 
-    return this.params[key] ?? defaultValue;
+    return this.params?.[key] ?? defaultValue;
   }
 }
 
