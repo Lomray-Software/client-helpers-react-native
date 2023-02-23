@@ -34,6 +34,7 @@ const HandleChangeScreen = ({
 
     if (hiddenOverlays.includes(componentName)) {
       // Overlay change
+      NavigationService.setOverlayInfo(componentId, componentName);
       logger?.info(`View overlay: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.overlay, params);
 
@@ -42,6 +43,7 @@ const HandleChangeScreen = ({
 
     if (hiddenModals.includes(componentName)) {
       // Modal change
+      NavigationService.setModalInfo(componentId, componentName);
       logger?.info(`View modal: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.modal, params);
 
