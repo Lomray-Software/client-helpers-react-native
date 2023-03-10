@@ -4,6 +4,7 @@ import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import _ from 'lodash';
+import type { ConversionData } from 'react-native-appsflyer';
 import appsFlyer from 'react-native-appsflyer';
 import DeviceInfo from 'react-native-device-info';
 import { Settings, AppEventsLogger } from 'react-native-fbsdk-next';
@@ -117,6 +118,11 @@ class Analytics {
   protected onTrackEvent: IAnalyticsParams['onTrackEvent'];
 
   /**
+   * @protected
+   */
+  protected static deepLinkData: ConversionData['data'] | null = null;
+
+  /**
    * @constructor
    * @private
    */
@@ -160,6 +166,15 @@ class Analytics {
     }
 
     return this.instance;
+  }
+
+  /**
+   * Add deep link listeners
+   */
+  public static registerDeepLinkListeners(): () => void {
+    return appsFlyer.onInstallConversionData((res) => {
+      Analytics.deepLinkData = res.data;
+    });
   }
 
   /**
@@ -355,6 +370,7 @@ class Analytics {
         break;
 
       case APP_EVENT.APP_START:
+        Object.assign(props, Analytics.deepLinkData);
         appsFlyer.startSdk();
         break;
     }
