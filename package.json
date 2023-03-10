@@ -89,6 +89,7 @@
     "@react-native-google-signin/google-signin": ">=7.2.2",
     "axios": "*",
     "lodash": "*",
+    "react-native-appsflyer": "^6.9.4",
     "react-native-code-push": "^7.0.5",
     "react-native-device-info": "^8.7.1",
     "react-native-fast-image": "^8.6.3",

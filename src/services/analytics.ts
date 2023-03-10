@@ -4,6 +4,7 @@ import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import _ from 'lodash';
+import appsFlyer from 'react-native-appsflyer';
 import DeviceInfo from 'react-native-device-info';
 import { Settings, AppEventsLogger } from 'react-native-fbsdk-next';
 import { getTrackingStatus, requestTrackingPermission } from 'react-native-tracking-transparency';
@@ -25,6 +26,8 @@ enum APP_EVENT {
 
 interface IAnalyticsParams {
   amplitudeToken: string;
+  appsFlyerToken: string;
+  appsFlyerId: string;
   isATT?: boolean;
   onTrackUser?: (
     user: Record<string, any>,
@@ -73,6 +76,18 @@ class Analytics {
   protected amplitudeToken: string;
 
   /**
+   * AppsFlyer token
+   * @protected
+   */
+  protected appsFlyerToken: string;
+
+  /**
+   * AppsFlyer app id
+   * @protected
+   */
+  protected appsFlyerId: string;
+
+  /**
    * @private
    */
   private logger?: ILogType;
@@ -105,11 +120,20 @@ class Analytics {
    * @constructor
    * @private
    */
-  private constructor({ amplitudeToken, isATT, onTrackUser, onTrackEvent }: IAnalyticsParams) {
+  private constructor({
+    amplitudeToken,
+    appsFlyerToken,
+    appsFlyerId,
+    isATT,
+    onTrackUser,
+    onTrackEvent,
+  }: IAnalyticsParams) {
     this.isDisabled = !Config.get('isProdDeployment');
     this.isProd = Config.get('isProd', false)!;
     this.logger = Config.get('logger');
     this.amplitudeToken = amplitudeToken;
+    this.appsFlyerToken = appsFlyerToken;
+    this.appsFlyerId = appsFlyerId;
     this.isATT = isATT ?? true;
     this.onTrackUser = onTrackUser;
     this.onTrackEvent = onTrackEvent;
@@ -158,6 +182,23 @@ class Analytics {
 
     void Amplitude.init(this.amplitudeToken);
     Settings.initializeSDK();
+    appsFlyer.initSdk(
+      {
+        devKey: this.appsFlyerToken,
+        isDebug: !this.isProd,
+        appId: this.appsFlyerId,
+        manualStart: true,
+        onInstallConversionDataListener: true,
+        onDeepLinkListener: true,
+        timeToWaitForATTUserAuthorization: 10,
+      },
+      (result) => {
+        this.logger?.info('AppsFlyer success initialize: ', result);
+      },
+      (error) => {
+        this.logger?.warn('AppsFlyer failed initialize: ', error);
+      },
+    );
 
     // Enable analytic collection only for production
     void this.checkATT().then((result) => {
@@ -247,6 +288,7 @@ class Analytics {
       void Amplitude.identify(identify);
       void crashlytics().setUserId(userId);
       AppEventsLogger.setUserID(userId);
+      appsFlyer.setCustomerUserId(userId);
     });
   }
 
@@ -303,15 +345,24 @@ class Analytics {
         void Amplitude.logRevenue({ price, quantity: count, eventProperties: extraParams });
         void analytics().logPurchase({ value: price, currency });
         AppEventsLogger.logPurchase(price, currency, extraParams);
-        void analytics().logEvent(eventName, props);
+        void appsFlyer.logEvent('af_subscribe', {
+          // eslint-disable-next-line camelcase
+          af_revenue: price,
+          // eslint-disable-next-line camelcase
+          af_currency: currency,
+          ...extraParams,
+        });
         break;
 
-      default:
-        void analytics().logEvent(eventName, props);
+      case APP_EVENT.APP_START:
+        appsFlyer.startSdk();
+        break;
     }
 
     void Amplitude.logEvent(eventName, props);
     AppEventsLogger.logEvent(eventName, props);
+    void analytics().logEvent(eventName, props);
+    void appsFlyer.logEvent(eventName, props);
   }
 
   /**
