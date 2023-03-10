@@ -204,7 +204,7 @@ class Analytics {
         appId: this.appsFlyerId,
         manualStart: true,
         onInstallConversionDataListener: true,
-        onDeepLinkListener: true,
+        onDeepLinkListener: false,
         timeToWaitForATTUserAuthorization: 10,
       },
       (result) => {
