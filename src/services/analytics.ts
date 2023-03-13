@@ -23,8 +23,8 @@ enum APP_EVENT {
   USER_SIGN_UP = 'user_sign_up',
   PURCHASE = 'purchase',
   PURCHASE_TRIAL = 'purchase_trial',
-  AD_SHOW = 'ad_show',
-  AD_CLICK = 'ad_click',
+  AD_SHOW = 'custom_ad_show',
+  AD_CLICK = 'custom_ad_click',
 }
 
 interface IAnalyticsParams {
