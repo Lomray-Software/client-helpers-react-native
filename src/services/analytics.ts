@@ -38,6 +38,7 @@ interface IAnalyticsParams {
       amplitude: Identify;
       google: FirebaseAnalyticsTypes.Module;
       fb: typeof AppEventsLogger;
+      appsFlyer: typeof appsFlyer;
     },
   ) => boolean;
   onTrackEvent?: (
@@ -47,6 +48,7 @@ interface IAnalyticsParams {
       amplitude: AmplitudeDefault;
       google: FirebaseAnalyticsTypes.Module;
       fb: typeof AppEventsLogger;
+      appsFlyer: typeof appsFlyer;
     },
   ) => void;
 }
@@ -280,6 +282,7 @@ class Analytics {
         amplitude: identify,
         google: analytics(),
         fb: AppEventsLogger,
+        appsFlyer,
       });
 
       if (!shouldSkip) {
@@ -324,6 +327,7 @@ class Analytics {
         google: analytics(),
         amplitude: Amplitude,
         fb: AppEventsLogger,
+        appsFlyer,
       }) ?? false;
 
     if (shouldSkip) {
