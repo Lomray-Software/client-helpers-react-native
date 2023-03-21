@@ -25,14 +25,8 @@ export interface IConfigParams {
   };
   hapticFeedbackOptions?: HapticOptions;
   codepush?: {
-    staging?: {
-      ios: string;
-      android: string;
-    };
-    prod?: {
-      ios: string;
-      android: string;
-    };
+    ios: string;
+    android: string;
   };
   indicators?: {
     activity?: {

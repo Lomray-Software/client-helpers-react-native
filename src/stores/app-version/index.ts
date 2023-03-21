@@ -124,7 +124,7 @@ class AppVersionStore {
       return;
     }
 
-    const { staging, prod } = keys;
+    const { ios, android } = keys;
     const isDev = Config.get('isLocalDevelopment');
     const options: SyncOptions = {
       ...(isDev
@@ -132,16 +132,14 @@ class AppVersionStore {
             updateDialog: {
               title: 'New cloud update',
             },
-            deploymentKey: isIOS ? staging?.ios : staging?.android,
           }
         : {
-            deploymentKey: isIOS ? prod?.ios : prod?.android,
             installMode: CodePush.InstallMode.IMMEDIATE,
           }),
     };
 
     const updateFunc = () => {
-      void CodePush.sync(options)
+      void CodePush.sync({ ...options, deploymentKey: isIOS ? ios : android })
         .then((res) => {
           this.logger?.info('App updated: ', res);
         })
