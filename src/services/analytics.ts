@@ -25,6 +25,8 @@ enum APP_EVENT {
   PURCHASE_TRIAL = 'purchase_trial',
   AD_SHOW = 'custom_ad_show',
   AD_CLICK = 'custom_ad_click',
+  PUSH_NOTIFICATION_OPEN = 'push_notification_open',
+  PUSH_NOTIFICATION_INITIAL = 'push_notification_initial',
 }
 
 interface IAnalyticsParams {
