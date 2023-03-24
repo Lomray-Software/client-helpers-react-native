@@ -34,6 +34,7 @@ interface IAnalyticsParams {
   appsFlyerToken: string;
   appsFlyerId: string;
   isATT?: boolean;
+  onATT?: (isAllow: boolean) => void;
   onTrackUser?: (
     user: Record<string, any>,
     params: {
@@ -112,6 +113,12 @@ class Analytics {
   protected hasAllowATT: boolean | null = null;
 
   /**
+   * Trigger when ATT resolves
+   * @protected
+   */
+  protected onATT: IAnalyticsParams['onATT'];
+
+  /**
    * Extra user set callback
    * @protected
    */
@@ -137,6 +144,7 @@ class Analytics {
     appsFlyerToken,
     appsFlyerId,
     isATT,
+    onATT,
     onTrackUser,
     onTrackEvent,
   }: IAnalyticsParams) {
@@ -147,6 +155,7 @@ class Analytics {
     this.appsFlyerToken = appsFlyerToken;
     this.appsFlyerId = appsFlyerId;
     this.isATT = isATT ?? true;
+    this.onATT = onATT;
     this.onTrackUser = onTrackUser;
     this.onTrackEvent = onTrackEvent;
   }
@@ -223,6 +232,8 @@ class Analytics {
 
     // Enable analytic collection only for production
     void this.checkATT().then((result) => {
+      this.onATT?.(result);
+
       if (!result) {
         return;
       }
