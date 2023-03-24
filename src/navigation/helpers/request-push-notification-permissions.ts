@@ -12,7 +12,8 @@ const RequestPushNotificationPermission = (): Promise<boolean> => {
     .then((authStatus) => {
       const isEnabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL ||
+        authStatus === messaging.AuthorizationStatus.EPHEMERAL;
 
       logger?.info(`Push permissions authorization status: ${authStatus} (${String(isEnabled)})`);
 
