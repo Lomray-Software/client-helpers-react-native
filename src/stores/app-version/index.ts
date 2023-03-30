@@ -112,7 +112,7 @@ class AppVersionStore {
     const isRealDevice = DeviceInfo.getDeviceType() !== 'unknown' && !DeviceInfo.isEmulatorSync();
 
     // Disable codepush for simulators
-    if (!isRealDevice) {
+    if (!isRealDevice || Config.get('isLocalDevelopment')) {
       return;
     }
 
