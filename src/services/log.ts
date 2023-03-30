@@ -3,6 +3,7 @@ import axios from 'axios';
 import type { configLoggerType, transportFunctionType } from 'react-native-logs';
 import { logger, consoleTransport } from 'react-native-logs';
 import uuid from 'react-native-uuid';
+import { tempMemoryTransport } from '../debug/temp-memory-transport';
 import Config from './config';
 
 type TLogger = ReturnType<(typeof logger)['createLogger']>;
@@ -20,6 +21,7 @@ export interface ILoggerOptions {
     url: string;
     token: string;
   };
+  hasTempMemoryTransport?: boolean;
 }
 
 /**
@@ -100,7 +102,12 @@ const grafanaLokiTransport = ({
       });
   });
 
-const initLogger = ({ grafana, crashlytics, params = {} }: ILoggerOptions): ILogType => {
+const initLogger = ({
+  grafana,
+  crashlytics,
+  hasTempMemoryTransport = true,
+  params = {},
+}: ILoggerOptions): ILogType => {
   /**
    * Log payload
    */
@@ -133,6 +140,10 @@ const initLogger = ({ grafana, crashlytics, params = {} }: ILoggerOptions): ILog
 
         if (grafanaTransport) {
           grafanaTransport(props);
+        }
+
+        if (hasTempMemoryTransport) {
+          tempMemoryTransport(props);
         }
       }
     },
