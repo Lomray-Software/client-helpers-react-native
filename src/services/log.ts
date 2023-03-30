@@ -141,10 +141,10 @@ const initLogger = ({
         if (grafanaTransport) {
           grafanaTransport(props);
         }
+      }
 
-        if (hasTempMemoryTransport) {
-          tempMemoryTransport(props);
-        }
+      if (hasTempMemoryTransport) {
+        tempMemoryTransport(props);
       }
     },
     transportOptions: isLocalDevelopment
