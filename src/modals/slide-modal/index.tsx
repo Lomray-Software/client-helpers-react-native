@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
@@ -11,6 +12,7 @@ interface ISlideModal {
   titleWrapperStyle?: StyleProp<ViewStyle>;
   titleStyle?: StyleProp<TextStyle>;
   doneStyle?: StyleProp<TextStyle>;
+  children: ReactNode;
 }
 
 /**
