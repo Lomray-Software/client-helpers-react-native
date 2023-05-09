@@ -11,7 +11,7 @@ interface IErrorBoundary {
   hasError: boolean;
 }
 
-class ErrorBoundary extends Component<WithTranslation, IErrorBoundary> {
+class ErrorBoundary extends Component<WithTranslation & { children: ReactNode }, IErrorBoundary> {
   state = {
     hasError: false,
   };

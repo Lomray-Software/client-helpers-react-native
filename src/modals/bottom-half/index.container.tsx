@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FCC } from '@lomray/client-helpers/interfaces';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Dimensions, PanResponder, View } from 'react-native';
 import PressHandler from '../../components/press-handler';
@@ -22,7 +22,7 @@ const OPENING_BACKGROUND_TIME = 300;
  * Modal container
  * @constructor
  */
-const BottomHalfContainer: FC<IBottomHalfContainer> = ({
+const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
   children,
   height, // default width equals content size
   onClose,

@@ -1,4 +1,5 @@
-import type { ComponentType, FC, ReactElement } from 'react';
+import type { FCC } from '@lomray/client-helpers/interfaces';
+import type { ComponentType, ReactElement } from 'react';
 import React from 'react';
 // eslint-disable-next-line import/default
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -18,7 +19,7 @@ interface IPlaceholder {
  * NOTE: isFirstRender in generally used for flat lists
  * @constructor
  */
-const Frame: FC<IPlaceholder> = ({
+const Frame: FCC<IPlaceholder> = ({
   isFetching,
   PlaceholderComponent,
   children,
