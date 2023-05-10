@@ -240,7 +240,7 @@ class Analytics {
 
       void Settings.setAdvertiserTrackingEnabled(true);
       void analytics().setAnalyticsCollectionEnabled(this.isProd);
-      void Amplitude.setDeviceId(DeviceInfo.getUniqueId());
+      void Amplitude.setDeviceId(DeviceInfo.getUniqueIdSync());
     });
   }
 
