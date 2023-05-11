@@ -49,8 +49,7 @@ const FlatList = <T,>({
   initialNumToRender = 5,
   ...props
 }: IFlatList<T>) => {
-  const length =
-    data instanceof Animated.Node ? data?.[' __value']?.length ?? 0 : data?.length ?? 0;
+  const length = data?.['length'] ?? 0;
   const hasRows = length > 0;
 
   const onEndReachedCalledDuringMomentum = useRef(true);
