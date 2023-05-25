@@ -50,16 +50,16 @@
     "@babel/preset-react": "^7.18.6",
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
-    "@lomray/eslint-config": "^2.0.2",
+    "@lomray/eslint-config": "^3.0.0",
     "@lomray/prettier-config": "^1.2.0",
     "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-terser": "^0.4.1",
+    "@rollup/plugin-terser": "^0.4.3",
     "@types/lodash": "^4.14.194",
-    "@types/react": "^18.2.6",
+    "@types/react": "^18.2.7",
     "@types/react-native": "^0.71.6",
     "@zerollup/ts-transform-paths": "^1.7.18",
-    "eslint": "^8.32.0",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
@@ -68,7 +68,7 @@
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-native": "0.71.7",
-    "rollup": "^2.79.1",
+    "rollup": "2.79.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-folder-input": "^1.0.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -102,14 +102,12 @@
     "react-native-svg": "^13.9.0",
     "react-native-tracking-transparency": ">=0.1.2",
     "react-native-webview": ">=11.26.0",
+    "tslib": "^2.5.2",
     "yup": "^0.32.11"
   },
   "resolutions": {
     "@types/react": "^18"
   },
-  "bundledDependencies": [
-    "tslib"
-  ],
   "bin": {
     "generate-release-config": "scripts/release-info.js"
   }

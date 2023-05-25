@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          npm set-script prepare ""
+          npm pkg delete scripts.prepare
           npm run build
 
       - name: Release
