@@ -38,7 +38,11 @@ const checkNewVersion = _.debounce(
               onPress: () => {
                 Linking.canOpenURL(storeUrl).then(
                   (supported) => {
-                    supported && Linking.openURL(storeUrl);
+                    if (!supported) {
+                      return;
+                    }
+
+                    void Linking.openURL(storeUrl);
                   },
                   (err) => showTopFlashMessage(i18n.t('translation:error'), err as string, 'error'),
                 );
