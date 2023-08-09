@@ -4,13 +4,9 @@ import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 /**
  * Sign in through Facebook
  */
-const FacebookSignIn = async () => {
+const FacebookSignIn = async (permissions: string[] = ['public_profile', 'email']) => {
   // Attempt login with permissions
-  const result = await LoginManager.logInWithPermissions([
-    'public_profile',
-    'email',
-    'user_friends',
-  ]);
+  const result = await LoginManager.logInWithPermissions(permissions);
 
   if (result.isCancelled) {
     const error = new Error('User cancelled the login process');

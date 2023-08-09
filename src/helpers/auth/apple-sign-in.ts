@@ -4,11 +4,11 @@ import auth from '@react-native-firebase/auth';
 /**
  * Sign in through Apple
  */
-const AppleSignIn = async () => {
+const AppleSignIn = async (scopes = [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME]) => {
   // Start the sign-in request
   const appleAuthRequestResponse = await appleAuth.performRequest({
     requestedOperation: appleAuth.Operation.LOGIN,
-    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    requestedScopes: scopes,
   });
 
   // Ensure Apple returned a user identityToken
