@@ -1,14 +1,11 @@
 import { fs } from '@lomray/react-native-layout-helper';
-import type { MessageType } from 'react-native-flash-message';
+import type { MessageOptions } from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
 import type { IConfigParams } from '../../services/config';
 import Config from '../../services/config';
 
-const showTopFlashMessage = (
-  message: string,
-  description: string,
-  type: MessageType = 'info',
-): void => {
+const showTopFlashMessage = (msgOptions: MessageOptions): void => {
+  const { type = 'info', ...restOptions } = msgOptions;
   const options = Config.get('topFlashMessage', {}) as NonNullable<
     IConfigParams['topFlashMessage']
   >;
@@ -16,13 +13,12 @@ const showTopFlashMessage = (
   const typeOptions = options?.[type] ?? {};
 
   showMessage({
-    message,
-    description,
     type,
     position: 'top',
     duration: 5000,
     ...commonOptions,
     ...typeOptions,
+    ...restOptions,
     style: [commonOptions?.style, typeOptions?.style],
     textStyle: [
       {
@@ -32,8 +28,9 @@ const showTopFlashMessage = (
       },
       commonOptions?.textStyle,
       typeOptions?.textStyle,
+      restOptions?.textStyle,
     ],
-    titleStyle: [commonOptions?.titleStyle, typeOptions?.titleStyle],
+    titleStyle: [commonOptions?.titleStyle, typeOptions?.titleStyle, restOptions?.titleStyle],
   });
 };
 
