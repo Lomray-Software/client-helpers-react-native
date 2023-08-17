@@ -19,7 +19,7 @@ const showTopFlashMessage = (msgOptions: MessageOptions): void => {
     ...commonOptions,
     ...typeOptions,
     ...restOptions,
-    style: [commonOptions?.style, typeOptions?.style],
+    style: [commonOptions?.style, typeOptions?.style, restOptions?.style],
     textStyle: [
       {
         color: '#ffffff',
