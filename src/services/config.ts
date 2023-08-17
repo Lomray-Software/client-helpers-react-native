@@ -1,6 +1,6 @@
 import type { ConfigureParams } from '@react-native-google-signin/google-signin';
 import _ from 'lodash';
-import type { MessageOptions } from 'react-native-flash-message';
+import type { MessageOptions, MessageType } from 'react-native-flash-message';
 import type { HapticOptions } from 'react-native-haptic-feedback';
 import type { ILogType } from './log';
 
@@ -14,14 +14,8 @@ export interface IConfigParams {
   appKeyName?: string;
   appBranch?: string;
   packageName?: string;
-  topFlashMessage?: {
-    colors?: {
-      error: string;
-      success: string;
-      info: string;
-      text: string;
-    };
-    options?: Partial<MessageOptions>;
+  topFlashMessage?: Partial<Record<MessageType, Partial<MessageOptions>>> & {
+    commonOptions?: Partial<MessageOptions>;
   };
   hapticFeedbackOptions?: HapticOptions;
   codepush?: {
@@ -53,11 +47,14 @@ class Config {
     isProdDeployment: false,
     appKeyName: 'unknown',
     topFlashMessage: {
-      colors: {
-        error: '#DB3737',
-        success: '#28a745',
-        info: '#222224',
-        text: '#ffffff',
+      danger: {
+        backgroundColor: '#DB3737',
+      },
+      success: {
+        backgroundColor: '#28a745',
+      },
+      info: {
+        backgroundColor: '#222224',
       },
     },
     hapticFeedbackOptions: {

@@ -2,6 +2,7 @@ import type { FCC } from '@lomray/client-helpers/interfaces';
 import { fs } from '@lomray/react-native-layout-helper';
 import React from 'react';
 import { View } from 'react-native';
+import type { MessageType } from 'react-native-flash-message';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import type { IConfigParams } from '../../services/config';
 import Config from '../../services/config';
@@ -15,24 +16,32 @@ const TopFlashMessages: FCC = () => (
 const showTopFlashMessage = (
   message: string,
   description: string,
-  type: 'error' | 'success' | 'info' = 'info',
+  type: MessageType = 'info',
 ): void => {
-  const { colors, options = {} } = Config.get('topFlashMessage', {}) as NonNullable<
+  const options = Config.get('topFlashMessage', {}) as NonNullable<
     IConfigParams['topFlashMessage']
   >;
-  const backgroundColor = colors?.[type];
+  const commonOptions = options?.commonOptions ?? {};
+  const typeOptions = options?.[type] ?? {};
 
   showMessage({
     message,
     description,
+    type,
     duration: 5000,
-    backgroundColor,
-    textStyle: {
-      fontWeight: '500',
-      fontSize: fs(3.733), // 14
-      color: colors?.text,
-    },
-    ...options,
+    ...commonOptions,
+    ...typeOptions,
+    style: [commonOptions?.style, typeOptions?.style],
+    textStyle: [
+      {
+        color: '#ffffff',
+        fontWeight: '500',
+        fontSize: fs(3.733), // 14
+      },
+      commonOptions?.textStyle,
+      typeOptions?.textStyle,
+    ],
+    titleStyle: [commonOptions?.titleStyle, typeOptions?.titleStyle],
   });
 };
 
