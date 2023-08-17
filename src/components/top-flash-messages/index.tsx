@@ -1,17 +1,8 @@
-import type { FCC } from '@lomray/client-helpers/interfaces';
 import { fs } from '@lomray/react-native-layout-helper';
-import React from 'react';
-import { View } from 'react-native';
 import type { MessageType } from 'react-native-flash-message';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
+import { showMessage } from 'react-native-flash-message';
 import type { IConfigParams } from '../../services/config';
 import Config from '../../services/config';
-
-const TopFlashMessages: FCC = () => (
-  <View>
-    <FlashMessage position="top" />
-  </View>
-);
 
 const showTopFlashMessage = (
   message: string,
@@ -28,6 +19,7 @@ const showTopFlashMessage = (
     message,
     description,
     type,
+    position: 'top',
     duration: 5000,
     ...commonOptions,
     ...typeOptions,
@@ -45,4 +37,5 @@ const showTopFlashMessage = (
   });
 };
 
-export { TopFlashMessages, showTopFlashMessage };
+// eslint-disable-next-line import/prefer-default-export
+export { showTopFlashMessage };
