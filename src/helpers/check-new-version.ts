@@ -45,7 +45,11 @@ const checkNewVersion = _.debounce(
                     void Linking.openURL(storeUrl);
                   },
                   (err) =>
-                    showTopFlashMessage(i18n.t('translation:error'), err as string, 'danger'),
+                    showTopFlashMessage({
+                      message: i18n.t('translation:error'),
+                      description: err,
+                      type: 'danger',
+                    }),
                 );
               },
             },

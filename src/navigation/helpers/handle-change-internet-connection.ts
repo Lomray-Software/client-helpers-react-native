@@ -10,10 +10,10 @@ const HandleChangeInternetConnection = (): void => {
   NetInfo.addEventListener((state) => {
     if (!state.isConnected) {
       Config.get('logger')?.info('No internet connection');
-      showTopFlashMessage(
-        i18n.t('translation:noConnection'),
-        i18n.t('translation:checkConnection'),
-      );
+      showTopFlashMessage({
+        message: i18n.t('translation:noConnection'),
+        description: i18n.t('translation:checkConnection'),
+      });
     }
   });
 };
