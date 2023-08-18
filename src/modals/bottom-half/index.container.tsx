@@ -1,5 +1,6 @@
 import type { FCC } from '@lomray/client-helpers/interfaces';
 import React, { useCallback, useEffect, useRef } from 'react';
+import type { ViewProps } from 'react-native';
 import { Animated, Dimensions, PanResponder, View } from 'react-native';
 import PressHandler from '../../components/press-handler';
 import { closeHalfBottom } from './control';
@@ -9,6 +10,11 @@ export interface IBottomHalfContainer {
   onClose: () => void;
   height?: number | string;
   shouldClose?: boolean;
+  containerStyle?: ViewProps['style'];
+  pressHandlerStyle?: ViewProps['style'];
+  dropdownStyle?: ViewProps['style'];
+  controlButtonContainerStyle?: ViewProps['style'];
+  controlButtonStyle?: ViewProps['style'];
 }
 
 /**
@@ -26,6 +32,11 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
   children,
   height, // default width equals content size
   onClose,
+  containerStyle,
+  dropdownStyle,
+  pressHandlerStyle,
+  controlButtonContainerStyle,
+  controlButtonStyle,
   shouldClose = false,
 }) => {
   const screenHeight = Dimensions.get('screen').height;
@@ -134,20 +145,25 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
     <Animated.View
       style={[
         styles.container,
+        containerStyle,
         {
           opacity: fadeAnim,
         },
       ]}
     >
-      <PressHandler style={styles.wrapper} onPress={onClose} />
+      <PressHandler style={[styles.wrapper, pressHandlerStyle]} onPress={onClose} />
       <Animated.View
         style={[
           { ...styles.dropdown, transform: [{ translateY }] },
+          dropdownStyle,
           (height && { height }) || undefined,
         ]}
       >
-        <Animated.View {...panResponders.panHandlers} style={styles.controlButtonBlock}>
-          <View style={styles.controlButton} />
+        <Animated.View
+          {...panResponders.panHandlers}
+          style={[styles.controlButtonBlock, controlButtonContainerStyle]}
+        >
+          <View style={[styles.controlButton, controlButtonStyle]} />
         </Animated.View>
         {children}
       </Animated.View>
