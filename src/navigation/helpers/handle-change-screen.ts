@@ -33,7 +33,7 @@ const HandleChangeScreen = ({
     }
 
     if (hiddenOverlays.includes(componentName)) {
-      // Overlay change
+      // Overlay open
       NavigationService.setOverlayInfo(componentId, componentName);
       logger?.info(`View overlay: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.overlay, params);
@@ -54,6 +54,13 @@ const HandleChangeScreen = ({
     NavigationService.setComponentInfo(componentId, componentName);
     logger?.info(`View screen: ${componentName}. Id: ${componentId}`);
     callback?.(EventScreen.screen, params);
+  });
+
+  Navigation.events().registerComponentDidDisappearListener(({ componentId, componentName }) => {
+    if (hiddenOverlays.includes(componentName)) {
+      // Overlay close
+      NavigationService.closeOverlay(componentId, componentName);
+    }
   });
 
   Navigation.events().registerBottomTabSelectedListener(

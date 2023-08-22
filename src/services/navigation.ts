@@ -22,16 +22,10 @@ class Navigation {
   private componentName: string;
 
   /**
-   * Last overlay id
+   * Opened overlays
    * @private
    */
-  private overlayId: string;
-
-  /**
-   * Last overlay name
-   * @private
-   */
-  private overlayName: string;
+  private overlayStack: { id: string; name: string }[] = [];
 
   /**
    * Last modal id
@@ -84,8 +78,19 @@ class Navigation {
    * Set overlay info
    */
   public setOverlayInfo(overlayId: string, overlayName: string): void {
-    this.overlayId = overlayId;
-    this.overlayName = overlayName;
+    this.overlayStack.push({
+      id: overlayId,
+      name: overlayName,
+    });
+  }
+
+  /**
+   * Remove overlay from stack
+   */
+  public closeOverlay(overlayId: string, overlayName: string): void {
+    this.overlayStack = this.overlayStack.filter(
+      ({ id, name }) => id !== overlayId && name !== overlayName,
+    );
   }
 
   /**
@@ -100,14 +105,14 @@ class Navigation {
    * Get current overlay id
    */
   public getOverlayId(): string {
-    return this.overlayId;
+    return this.overlayStack?.[this.overlayStack.length - 1]?.id;
   }
 
   /**
    * Get current overlay name
    */
   public getOverlayName(): string {
-    return this.overlayName;
+    return this.overlayStack?.[this.overlayStack.length - 1]?.name;
   }
 
   /**
