@@ -9,7 +9,7 @@ type TParamsInt<TS> = MatchKeyTypes<TS, number>;
  * Storage for global application parameters
  */
 class ConfigStore<TParams> {
-  static isSingleton = true;
+  static isGlobal = true;
 
   /**
    * State

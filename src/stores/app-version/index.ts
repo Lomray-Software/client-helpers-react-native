@@ -15,7 +15,7 @@ class AppVersionStore {
   /**
    * This is singleton
    */
-  static isSingleton = true;
+  static isGlobal = true;
 
   /**
    * Current application version
