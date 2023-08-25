@@ -18,9 +18,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get npm package version
+      - name: Get version
         id: package-version
-        uses: Saionaro/extract-package-version@v1.2.1
+        run: npx @lomray/microservices-cli package-version
 
       - uses: SonarSource/sonarcloud-github-action@master
         env:
