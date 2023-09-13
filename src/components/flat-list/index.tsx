@@ -1,7 +1,7 @@
 import type { ReplaceReturnType } from '@lomray/client-helpers/interfaces';
 import _ from 'lodash';
-import type { ComponentType, ReactElement } from 'react';
-import React, { useCallback, useRef } from 'react';
+import type { ComponentType, ReactElement, ForwardedRef } from 'react';
+import React, { useCallback, useRef, forwardRef } from 'react';
 import type { FlatListProps, ImageSourcePropType } from 'react-native';
 import type { AnimateProps } from 'react-native-reanimated';
 // eslint-disable-next-line import/default
@@ -32,23 +32,26 @@ export interface IFlatList<TEntity = Record<string, any>>
 /**
  * Flat list wrapper
  */
-const FlatList = <T,>({
-  data,
-  EmptyComponent,
-  PlaceholderComponent,
-  emptyListTitle,
-  emptyListText,
-  emptyListImg,
-  onEndReached,
-  onEndReachedAsync,
-  placeholderCount,
-  placeholderContainerStyle,
-  totalEntities = 0,
-  isFetching = false,
-  isFirstRender = false,
-  initialNumToRender = 5,
-  ...props
-}: IFlatList<T>) => {
+const FlatList = <T,>(
+  {
+    data,
+    EmptyComponent,
+    PlaceholderComponent,
+    emptyListTitle,
+    emptyListText,
+    emptyListImg,
+    onEndReached,
+    onEndReachedAsync,
+    placeholderCount,
+    placeholderContainerStyle,
+    totalEntities = 0,
+    isFetching = false,
+    isFirstRender = false,
+    initialNumToRender = 5,
+    ...props
+  }: IFlatList<T>,
+  ref: ForwardedRef<Animated.FlatList<T>>,
+) => {
   const length = data?.['length'] ?? 0;
   const hasRows = length > 0;
 
@@ -96,6 +99,7 @@ const FlatList = <T,>({
       />
       {!isFirstRender && (
         <Animated.FlatList<T>
+          ref={ref}
           entering={FadeIn}
           data={data}
           refreshing={isFetching}
@@ -131,4 +135,4 @@ const FlatList = <T,>({
   );
 };
 
-export default FlatList;
+export default forwardRef(FlatList);

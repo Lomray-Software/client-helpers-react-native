@@ -1,7 +1,7 @@
 import type { ReplaceReturnType } from '@lomray/client-helpers/interfaces';
 import _ from 'lodash';
-import type { ComponentType, ReactElement } from 'react';
-import React, { useCallback, useRef } from 'react';
+import type { ComponentType, ReactElement, ForwardedRef } from 'react';
+import React, { useCallback, useRef, forwardRef } from 'react';
 import type { ImageSourcePropType, SectionListProps } from 'react-native';
 import { SectionList as DefaultSectionList } from 'react-native';
 // eslint-disable-next-line import/default
@@ -30,23 +30,26 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
 /**
  * Section list wrapper
  */
-const SectionList = <T,>({
-  sections,
-  EmptyComponent,
-  PlaceholderComponent,
-  emptyListTitle,
-  emptyListText,
-  emptyListImg,
-  onEndReached,
-  onEndReachedAsync,
-  placeholderCount,
-  placeholderContainerStyle,
-  totalEntities = 0,
-  isFetching = false,
-  isFirstRender = false,
-  initialNumToRender = 5,
-  ...props
-}: ISectionList<T>) => {
+const SectionList = <T,>(
+  {
+    sections,
+    EmptyComponent,
+    PlaceholderComponent,
+    emptyListTitle,
+    emptyListText,
+    emptyListImg,
+    onEndReached,
+    onEndReachedAsync,
+    placeholderCount,
+    placeholderContainerStyle,
+    totalEntities = 0,
+    isFetching = false,
+    isFirstRender = false,
+    initialNumToRender = 5,
+    ...props
+  }: ISectionList<T>,
+  ref: ForwardedRef<DefaultSectionList>,
+) => {
   const hasRows = (sections?.length ?? 0) > 0;
   const onEndReachedCalledDuringMomentum = useRef(true);
 
@@ -93,6 +96,7 @@ const SectionList = <T,>({
       {!isFirstRender && (
         <Animated.View entering={FadeIn} layout={Layout.duration(300)}>
           <DefaultSectionList<T>
+            ref={ref}
             sections={sections}
             refreshing={isFetching}
             initialNumToRender={initialNumToRender}
@@ -127,4 +131,4 @@ const SectionList = <T,>({
   );
 };
 
-export default SectionList;
+export default forwardRef(SectionList);
