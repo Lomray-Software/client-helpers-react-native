@@ -7,9 +7,10 @@ import { closeHalfBottom } from './control';
 import styles from './styles';
 
 export interface IBottomHalfContainer {
-  onClose: () => void;
+  onClose?: () => void;
   height?: number | string;
   shouldClose?: boolean;
+  hasControlButton?: boolean;
   containerStyle?: ViewProps['style'];
   pressHandlerStyle?: ViewProps['style'];
   dropdownStyle?: ViewProps['style'];
@@ -37,6 +38,7 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
   pressHandlerStyle,
   controlButtonContainerStyle,
   controlButtonStyle,
+  hasControlButton = true,
   shouldClose = false,
 }) => {
   const screenHeight = Dimensions.get('screen').height;
@@ -101,7 +103,7 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
     closeAnim();
     setTimeout(() => {
       void closeHalfBottom();
-      onClose();
+      onClose?.();
     }, CLOSING_TIME);
   }, [closeAnim]);
 
@@ -133,7 +135,7 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
       }),
       onPanResponderRelease: (_, gs) => {
         if (gs.dy > 0 && gs.vy > 1) {
-          return onClose();
+          return onClose?.();
         }
 
         return resetPositionAnim();
@@ -159,12 +161,14 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
           (height && { height }) || undefined,
         ]}
       >
-        <Animated.View
-          {...panResponders.panHandlers}
-          style={[styles.controlButtonBlock, controlButtonContainerStyle]}
-        >
-          <View style={[styles.controlButton, controlButtonStyle]} />
-        </Animated.View>
+        {hasControlButton && (
+          <Animated.View
+            {...panResponders.panHandlers}
+            style={[styles.controlButtonBlock, controlButtonContainerStyle]}
+          >
+            <View style={[styles.controlButton, controlButtonStyle]} />
+          </Animated.View>
+        )}
         {children}
       </Animated.View>
     </Animated.View>
