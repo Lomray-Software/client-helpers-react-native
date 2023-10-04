@@ -1,5 +1,5 @@
 interface ITabsInfo {
-  [tabIndex: number]: {
+  [tabIndex: number | string]: {
     componentId: string;
     componentName: string;
   };
@@ -63,7 +63,10 @@ class Navigation {
   public setComponentInfo(componentId: string, componentName: string): void {
     this.componentId = componentId;
     this.componentName = componentName;
-    this.tabsInfo[this.bottomTabId] = { componentId, componentName };
+
+    const tabId = this.modalId || this.bottomTabId;
+
+    this.tabsInfo[tabId] = { componentId, componentName };
   }
 
   /**
@@ -99,6 +102,20 @@ class Navigation {
   public setModalInfo(modalId: string, modalName: string): void {
     this.modalId = modalId;
     this.modalName = modalName;
+  }
+
+  /**
+   * Close modal
+   */
+  public closeModal(): void {
+    this.modalId = '';
+    this.modalName = '';
+
+    // restore nav info
+    const { componentId, componentName } = this.tabsInfo[this.bottomTabId];
+
+    this.componentId = componentId;
+    this.componentName = componentName;
   }
 
   /**
@@ -140,7 +157,9 @@ class Navigation {
    * Get current component id for tab
    */
   public getTabComponentId(bottomTabId?: number): string | undefined {
-    return this.tabsInfo[bottomTabId ?? this.bottomTabId]?.componentId;
+    const tabId = this.modalId || this.bottomTabId;
+
+    return this.tabsInfo[bottomTabId ?? tabId]?.componentId;
   }
 
   /**

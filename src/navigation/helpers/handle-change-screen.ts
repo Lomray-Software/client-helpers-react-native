@@ -57,10 +57,15 @@ const HandleChangeScreen = ({
   });
 
   Navigation.events().registerComponentDidDisappearListener(({ componentId, componentName }) => {
+    // Overlay close
     if (hiddenOverlays.includes(componentName)) {
-      // Overlay close
       NavigationService.closeOverlay(componentId, componentName);
     }
+  });
+
+  Navigation.events().registerModalDismissedListener(() => {
+    // Modal close
+    NavigationService.closeModal();
   });
 
   Navigation.events().registerBottomTabSelectedListener(
