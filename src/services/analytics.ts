@@ -27,6 +27,8 @@ enum APP_EVENT {
   AD_CLICK = 'custom_ad_click',
   PUSH_NOTIFICATION_OPEN = 'push_notification_open',
   PUSH_NOTIFICATION_INITIAL = 'push_notification_initial',
+  DEEP_LINK_OPEN = 'deep_link_opened',
+  DEEP_LINK_INITIAL = 'deep_link_initial',
 }
 
 interface IAnalyticsParams {
