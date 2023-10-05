@@ -28,16 +28,9 @@ class Navigation {
   private overlayStack: { id: string; name: string }[] = [];
 
   /**
-   * Last modal id
-   * @private
+   * Opened modals
    */
-  private modalId: string;
-
-  /**
-   * Last modal name
-   * @private
-   */
-  private modalName: string;
+  private modalStack: { id: string; name: string }[] = [];
 
   /**
    * Component id and name by tab
@@ -64,7 +57,7 @@ class Navigation {
     this.componentId = componentId;
     this.componentName = componentName;
 
-    const tabId = this.modalId || this.bottomTabId;
+    const tabId = this.getModalId() || this.bottomTabId;
 
     this.tabsInfo[tabId] = { componentId, componentName };
   }
@@ -100,19 +93,23 @@ class Navigation {
    * Set modal info
    */
   public setModalInfo(modalId: string, modalName: string): void {
-    this.modalId = modalId;
-    this.modalName = modalName;
+    this.modalStack.push({
+      id: modalId,
+      name: modalName,
+    });
   }
 
   /**
    * Close modal
    */
-  public closeModal(): void {
-    this.modalId = '';
-    this.modalName = '';
+  public closeModal(modalId: string, modalName: string): void {
+    this.modalStack = this.modalStack.filter(
+      ({ id, name }) => id !== modalId && name !== modalName,
+    );
 
     // restore nav info
-    const { componentId, componentName } = this.tabsInfo[this.bottomTabId];
+    const tabId = this.getModalId() || this.bottomTabId;
+    const { componentId, componentName } = this.tabsInfo[tabId];
 
     this.componentId = componentId;
     this.componentName = componentName;
@@ -136,14 +133,14 @@ class Navigation {
    * Get current modal id
    */
   public getModalId(): string {
-    return this.modalId;
+    return this.modalStack?.[this.modalStack.length - 1]?.id;
   }
 
   /**
    * Get current overlay name
    */
   public getModalName(): string {
-    return this.modalName;
+    return this.modalStack?.[this.modalStack.length - 1]?.name;
   }
 
   /**
@@ -157,7 +154,7 @@ class Navigation {
    * Get current component id for tab
    */
   public getTabComponentId(bottomTabId?: number): string | undefined {
-    const tabId = this.modalId || this.bottomTabId;
+    const tabId = this.getModalId() || this.bottomTabId;
 
     return this.tabsInfo[bottomTabId ?? tabId]?.componentId;
   }

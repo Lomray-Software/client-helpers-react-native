@@ -63,9 +63,9 @@ const HandleChangeScreen = ({
     }
   });
 
-  Navigation.events().registerModalDismissedListener(() => {
+  Navigation.events().registerModalDismissedListener(({ componentId, componentName }) => {
     // Modal close
-    NavigationService.closeModal();
+    NavigationService.closeModal(componentId, componentName);
   });
 
   Navigation.events().registerBottomTabSelectedListener(
