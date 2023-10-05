@@ -1,6 +1,6 @@
 import type { ReplaceReturnType } from '@lomray/client-helpers/interfaces';
 import _ from 'lodash';
-import type { ComponentType, ReactElement, ForwardedRef } from 'react';
+import type { ComponentType, ReactElement, Ref } from 'react';
 import React, { useCallback, useRef, forwardRef } from 'react';
 import type { FlatListProps, ImageSourcePropType } from 'react-native';
 import type { AnimateProps } from 'react-native-reanimated';
@@ -32,7 +32,7 @@ export interface IFlatList<TEntity = Record<string, any>>
 /**
  * Flat list wrapper
  */
-const FlatList = <T,>(
+const FlatList = <TEntity, TRef>(
   {
     data,
     EmptyComponent,
@@ -49,8 +49,8 @@ const FlatList = <T,>(
     isFirstRender = false,
     initialNumToRender = 5,
     ...props
-  }: IFlatList<T>,
-  ref: ForwardedRef<Animated.FlatList<T>>,
+  }: IFlatList<TEntity>,
+  ref: Ref<TRef>,
 ) => {
   const length = data?.['length'] ?? 0;
   const hasRows = length > 0;
@@ -98,8 +98,8 @@ const FlatList = <T,>(
         PlaceholderComponent={PlaceholderComponent}
       />
       {!isFirstRender && (
-        <Animated.FlatList<T>
-          ref={ref}
+        <Animated.FlatList<TEntity>
+          ref={ref as never}
           entering={FadeIn}
           data={data}
           refreshing={isFetching}
@@ -135,4 +135,6 @@ const FlatList = <T,>(
   );
 };
 
-export default forwardRef(FlatList);
+export default forwardRef(FlatList as never) as <TEntity, TRef>(
+  p: IFlatList<TEntity> & { ref?: Ref<TRef> },
+) => ReactElement;

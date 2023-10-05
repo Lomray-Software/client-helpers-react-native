@@ -1,6 +1,6 @@
 import type { ReplaceReturnType } from '@lomray/client-helpers/interfaces';
 import _ from 'lodash';
-import type { ComponentType, ReactElement, ForwardedRef } from 'react';
+import type { ComponentType, ReactElement, Ref } from 'react';
 import React, { useCallback, useRef, forwardRef } from 'react';
 import type { ImageSourcePropType, SectionListProps } from 'react-native';
 import { SectionList as DefaultSectionList } from 'react-native';
@@ -30,7 +30,7 @@ export interface ISectionList<TEntity = Record<string, any>> extends SectionList
 /**
  * Section list wrapper
  */
-const SectionList = <T,>(
+const SectionList = <TEntity, TRef>(
   {
     sections,
     EmptyComponent,
@@ -47,8 +47,8 @@ const SectionList = <T,>(
     isFirstRender = false,
     initialNumToRender = 5,
     ...props
-  }: ISectionList<T>,
-  ref: ForwardedRef<DefaultSectionList>,
+  }: ISectionList<TEntity>,
+  ref: Ref<TRef>,
 ) => {
   const hasRows = (sections?.length ?? 0) > 0;
   const onEndReachedCalledDuringMomentum = useRef(true);
@@ -95,8 +95,8 @@ const SectionList = <T,>(
       />
       {!isFirstRender && (
         <Animated.View entering={FadeIn} layout={Layout.duration(300)}>
-          <DefaultSectionList<T>
-            ref={ref}
+          <DefaultSectionList<TEntity>
+            ref={ref as never}
             sections={sections}
             refreshing={isFetching}
             initialNumToRender={initialNumToRender}
@@ -131,4 +131,6 @@ const SectionList = <T,>(
   );
 };
 
-export default forwardRef(SectionList);
+export default forwardRef(SectionList as never) as <TE, TR>(
+  p: ISectionList<TE> & { ref?: Ref<TR> },
+) => ReactElement;
