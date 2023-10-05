@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import type { AlertButton } from 'react-native';
 import { Alert, Linking } from 'react-native';
 import { showTopFlashMessage } from '../components/top-flash-messages';
 import Config from '../services/config';
@@ -9,7 +10,7 @@ import VersionCheck from '../services/version-check';
  * Check app version and show dialog for update
  */
 const checkNewVersion = _.debounce(
-  () => {
+  (isMandatoryUpdate = false) => {
     const isDev = !Config.get('isProdDeployment');
     const packageName = Config.get('packageName');
     const logger = Config.get('logger');
@@ -25,36 +26,40 @@ const checkNewVersion = _.debounce(
           return;
         }
 
+        const buttons: AlertButton[] = [
+          {
+            text: i18n.t('translation:cancel'),
+            style: 'cancel',
+          },
+          {
+            text: i18n.t('translation:update'),
+            onPress: () => {
+              Linking.canOpenURL(storeUrl).then(
+                (supported) => {
+                  if (!supported) {
+                    return;
+                  }
+
+                  void Linking.openURL(storeUrl);
+                },
+                (err) =>
+                  showTopFlashMessage({
+                    message: i18n.t('translation:error'),
+                    description: err,
+                    type: 'danger',
+                  }),
+              );
+            },
+          },
+        ];
+
         Alert.alert(
           i18n.t('translation:alertTitle'),
           i18n.t('translation:alertMessage'),
-          [
-            {
-              text: i18n.t('translation:cancel'),
-              style: 'cancel',
-            },
-            {
-              text: i18n.t('translation:update'),
-              onPress: () => {
-                Linking.canOpenURL(storeUrl).then(
-                  (supported) => {
-                    if (!supported) {
-                      return;
-                    }
-
-                    void Linking.openURL(storeUrl);
-                  },
-                  (err) =>
-                    showTopFlashMessage({
-                      message: i18n.t('translation:error'),
-                      description: err,
-                      type: 'danger',
-                    }),
-                );
-              },
-            },
-          ],
-          { cancelable: false },
+          isMandatoryUpdate ? [buttons[1]] : buttons,
+          {
+            cancelable: false,
+          },
         );
       })
       .catch((e) => {
