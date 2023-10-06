@@ -6,6 +6,7 @@ import type { IBottomHalfContainer } from './index.container';
 
 export interface IBottomHalf extends Omit<IBottomHalfContainer, 'shouldClose'> {
   isVisible: boolean;
+  id?: string; // custom overlay id
   deps?: boolean | string | Record<string, any>;
 }
 
@@ -15,6 +16,7 @@ export interface IBottomHalf extends Omit<IBottomHalfContainer, 'shouldClose'> {
  */
 const BottomHalf: FC<IBottomHalf> = ({ isVisible, deps, ...props }) => {
   const isOpened = useRef(false);
+  const { id = OVERLAY_ID } = props;
 
   useEffect(() => {
     if (isVisible && !isOpened.current) {
@@ -28,7 +30,7 @@ const BottomHalf: FC<IBottomHalf> = ({ isVisible, deps, ...props }) => {
     if (!isVisible && isOpened.current) {
       // Close modal
       isOpened.current = false;
-      Navigation.updateProps(OVERLAY_ID, {
+      Navigation.updateProps(id, {
         shouldClose: true,
       });
     }
@@ -42,7 +44,7 @@ const BottomHalf: FC<IBottomHalf> = ({ isVisible, deps, ...props }) => {
       return;
     }
 
-    Navigation.updateProps(OVERLAY_ID, props);
+    Navigation.updateProps(id, props);
   }, [isVisible, deps]);
 
   return null;

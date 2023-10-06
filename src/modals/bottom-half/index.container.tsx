@@ -7,6 +7,7 @@ import { closeHalfBottom } from './control';
 import styles from './styles';
 
 export interface IBottomHalfContainer {
+  id?: string;
   onClose?: () => void;
   height?: number | string;
   shouldClose?: boolean;
@@ -30,6 +31,7 @@ const OPENING_BACKGROUND_TIME = 300;
  * @constructor
  */
 const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
+  id,
   children,
   height, // default width equals content size
   onClose,
@@ -102,7 +104,7 @@ const BottomHalfContainer: FCC<IBottomHalfContainer> = ({
   const handleDismiss = useCallback(() => {
     closeAnim();
     setTimeout(() => {
-      void closeHalfBottom();
+      void closeHalfBottom(id);
       onClose?.();
     }, CLOSING_TIME);
   }, [closeAnim]);
