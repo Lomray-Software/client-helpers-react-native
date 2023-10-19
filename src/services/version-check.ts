@@ -97,7 +97,11 @@ class VersionCheck {
     const storeVersion = await this.getStoreVersion();
 
     return {
-      hasUpdate: Boolean(storeVersion && currentVersion && storeVersion > currentVersion),
+      hasUpdate: Boolean(
+        storeVersion &&
+          currentVersion &&
+          this.compareSoftwareVersions(storeVersion, currentVersion),
+      ),
       storeUrl: this.getStoreUrl(),
     };
   }
@@ -113,6 +117,18 @@ class VersionCheck {
       android: `https://play.google.com/store/apps/details?id=${bundleId}&hl=en&gl=US`,
     }) as string;
   }
+
+  /**
+   *  Locale compare returns
+   *  0: version strings are equal
+   *  1: 1st is greater than 2nd
+   * -1: 2nd is greater than 1st
+   *
+   * To convert to bool, we use returnedValue > 0
+   */
+  public compareSoftwareVersions = (firstVersion: string, secondVersion: string): boolean =>
+    firstVersion.localeCompare(secondVersion, undefined, { numeric: true, sensitivity: 'base' }) >
+    0;
 }
 
 export default VersionCheck;
