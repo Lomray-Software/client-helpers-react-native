@@ -96,10 +96,8 @@ class VersionCheck {
     const currentVersion = DeviceInfo.getVersion();
     const storeVersion = await this.getStoreVersion();
 
-    const isStoreVersionNewer = this.compareSoftwareVersions(storeVersion, currentVersion);
-
     return {
-      hasUpdate: isStoreVersionNewer,
+      hasUpdate: this.compareSoftwareVersions(storeVersion, currentVersion),
       storeUrl: this.getStoreUrl(),
     };
   }
@@ -124,7 +122,7 @@ class VersionCheck {
    *
    * To convert to bool, we use returnedValue > 0
    */
-  public compareSoftwareVersions = (
+  private compareSoftwareVersions = (
     firstVersion: string | null,
     secondVersion: string,
   ): boolean => {
