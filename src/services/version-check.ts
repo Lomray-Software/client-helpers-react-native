@@ -4,8 +4,9 @@ import Config from './config';
 import type { ILogType } from './log';
 
 interface IVersionCheckOptions {
-  iosStoreId?: string;
   bundleId: string;
+  countryCode: string;
+  iosStoreId?: string;
 }
 
 /**
@@ -42,11 +43,15 @@ class VersionCheck {
    * Get store app version
    */
   private async getStoreVersion(): Promise<string | null> {
-    const { bundleId, iosStoreId } = this.options;
+    const { bundleId, iosStoreId, countryCode } = this.options;
 
+    /**
+     * hl stands for 'Host`s language' - language will be used in your app store
+     * gl stands for region where application is based in
+     */
     const storeUrl = Platform.select({
-      ios: `https://itunes.apple.com/lookup?bundleId=${bundleId}&date=${Date.now()}`,
-      android: `https://play.google.com/store/apps/details?id=${bundleId}&hl=en&gl=US`,
+      ios: `https://itunes.apple.com/lookup?bundleId=${bundleId}&country=${countryCode}&date=${Date.now()}`,
+      android: `https://play.google.com/store/apps/details?id=${bundleId}&hl=en&gl=${countryCode.toUpperCase()}`,
     }) as string;
 
     try {
@@ -106,11 +111,15 @@ class VersionCheck {
    * Get store url
    */
   public getStoreUrl(): string {
-    const { bundleId, iosStoreId } = this.options;
+    const { bundleId, iosStoreId, countryCode } = this.options;
 
+    /**
+     * hl stands for 'Host Language' - language will be used in your app store
+     * gl stands for region where application is based in
+     */
     return Platform.select({
       ios: `itms-apps://apps.apple.com/app/id${iosStoreId as string}`,
-      android: `https://play.google.com/store/apps/details?id=${bundleId}&hl=en&gl=US`,
+      android: `https://play.google.com/store/apps/details?id=${bundleId}&hl=en&gl=${countryCode.toUpperCase()}`,
     }) as string;
   }
 
