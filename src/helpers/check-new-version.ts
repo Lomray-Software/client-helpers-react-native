@@ -6,11 +6,18 @@ import Config from '../services/config';
 import i18n from '../services/localization';
 import VersionCheck from '../services/version-check';
 
+interface ICheckNewVersion {
+  isMandatoryUpdate: boolean;
+  countryCode: string;
+}
+
 /**
  * Check app version and show dialog for update
  */
 const checkNewVersion = _.debounce(
-  (isMandatoryUpdate = false) => {
+  (params?: ICheckNewVersion): void => {
+    const { countryCode = 'us', isMandatoryUpdate = false } = params ?? {};
+
     const isDev = !Config.get('isProdDeployment');
     const packageName = Config.get('packageName');
     const logger = Config.get('logger');
@@ -19,7 +26,7 @@ const checkNewVersion = _.debounce(
       return;
     }
 
-    VersionCheck.init({ bundleId: packageName })
+    VersionCheck.init({ bundleId: packageName, countryCode })
       .needUpdate()
       .then(({ hasUpdate, storeUrl }) => {
         if (!hasUpdate) {
