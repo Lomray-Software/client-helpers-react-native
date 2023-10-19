@@ -96,12 +96,10 @@ class VersionCheck {
     const currentVersion = DeviceInfo.getVersion();
     const storeVersion = await this.getStoreVersion();
 
+    const isStoreVersionNewer = this.compareSoftwareVersions(storeVersion, currentVersion);
+
     return {
-      hasUpdate: Boolean(
-        storeVersion &&
-          currentVersion &&
-          this.compareSoftwareVersions(storeVersion, currentVersion),
-      ),
+      hasUpdate: isStoreVersionNewer,
       storeUrl: this.getStoreUrl(),
     };
   }
@@ -126,9 +124,19 @@ class VersionCheck {
    *
    * To convert to bool, we use returnedValue > 0
    */
-  public compareSoftwareVersions = (firstVersion: string, secondVersion: string): boolean =>
-    firstVersion.localeCompare(secondVersion, undefined, { numeric: true, sensitivity: 'base' }) >
-    0;
+  public compareSoftwareVersions = (
+    firstVersion: string | null,
+    secondVersion: string,
+  ): boolean => {
+    if (!firstVersion) {
+      return false;
+    }
+
+    return (
+      firstVersion.localeCompare(secondVersion, undefined, { numeric: true, sensitivity: 'base' }) >
+      0
+    );
+  };
 }
 
 export default VersionCheck;
