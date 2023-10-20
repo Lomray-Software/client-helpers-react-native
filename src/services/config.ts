@@ -25,6 +25,7 @@ export interface IConfigParams {
   indicators?: {
     activity?: {
       color: string;
+      backgroundColor?: string;
     };
     loader?: {
       color: string;

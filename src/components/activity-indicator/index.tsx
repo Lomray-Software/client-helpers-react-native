@@ -7,6 +7,7 @@ import styles from './styles';
 interface IActivityIndicator {
   isFetching: boolean;
   color?: string;
+  backgroundColor?: string;
   size?: 'small' | 'large';
   isTransparent?: boolean;
 }
@@ -17,6 +18,7 @@ interface IActivityIndicator {
 const ActivityIndicator: FC<IActivityIndicator> = ({
   isFetching = false,
   color,
+  backgroundColor,
   size = 'large',
   isTransparent = false,
 }) => {
@@ -25,10 +27,16 @@ const ActivityIndicator: FC<IActivityIndicator> = ({
   }
 
   const usedColor = color ?? Config.get('indicators')?.activity?.color;
+  const usedBackgroundColor =
+    backgroundColor ?? Config.get('indicators')?.activity?.backgroundColor;
 
   return (
     <SafeAreaView
-      style={[styles.wrapperIndicator, isTransparent && styles.wrapperIndicatorTransparent]}
+      style={[
+        styles.wrapperIndicator,
+        isTransparent && styles.wrapperIndicatorTransparent,
+        Boolean(usedBackgroundColor) && { backgroundColor },
+      ]}
     >
       <Indicator style={styles.indicator} color={usedColor} size={size} />
     </SafeAreaView>
