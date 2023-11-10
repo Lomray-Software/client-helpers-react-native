@@ -231,20 +231,29 @@ class Analytics {
         this.logger?.warn('AppsFlyer failed initialize: ', error);
       },
     );
-
-    // Enable analytic collection only for production
-    void this.checkATT().then((result) => {
-      this.onATT?.(result);
-
-      if (!result) {
-        return;
-      }
-
-      void Settings.setAdvertiserTrackingEnabled(true);
-      void analytics().setAnalyticsCollectionEnabled(this.isProd);
-      void Amplitude.setDeviceId(DeviceInfo.getUniqueIdSync());
-    });
   }
+
+  /**
+   * Initial check ATT
+   * Enable analytic collection only for production
+   */
+  public initialATT = async (): Promise<void> => {
+    try {
+      await this.checkATT().then((result) => {
+        this.onATT?.(result);
+
+        if (!result) {
+          return;
+        }
+
+        void Settings.setAdvertiserTrackingEnabled(true);
+        void analytics().setAnalyticsCollectionEnabled(this.isProd);
+        void AmplitudeDefault.getInstance().setDeviceId(DeviceInfo.getUniqueIdSync());
+      });
+    } catch (e) {
+      this.logger?.info('Request app tracking transparency failed.', e);
+    }
+  };
 
   /**
    * Check APP TRACKING TRANSPARENCY
