@@ -130,9 +130,9 @@ const initLogger = ({
     enabled: !isTests,
     severity: isLocalDevelopment ? 'debug' : 'info',
     transport: (props) => {
-      if (isLocalDevelopment) {
-        consoleTransport(props);
-      } else {
+      consoleTransport(props);
+
+      if (!isLocalDevelopment) {
         // Production transport
         if (crashlytics) {
           firebaseCrashlyticsTransport(crashlytics, props);
