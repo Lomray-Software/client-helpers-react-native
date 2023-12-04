@@ -46,6 +46,7 @@
     "reactotron-react-native": "^5.0.3"
   },
   "devDependencies": {
+    "@amplitude/react-native": ">=2.16.2",
     "@babel/core": "^7.20.12",
     "@babel/preset-react": "^7.18.6",
     "@commitlint/cli": "^17.7.1",
@@ -58,6 +59,8 @@
     "@types/react": "^18.2.7",
     "@types/react-native": "^0.71.6",
     "@zerollup/ts-transform-paths": "^1.7.18",
+    "react-native-appsflyer": ">=6.9.4",
+    "react-native-fbsdk-next": "^11.2.1",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -78,7 +81,6 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@amplitude/react-native": ">=2.16.2",
     "@invertase/react-native-apple-authentication": ">=2.2.2",
     "@lomray/client-helpers": "*",
     "@react-native-community/netinfo": "^9.3.7",
@@ -89,11 +91,9 @@
     "@react-native-google-signin/google-signin": ">=7.2.2",
     "axios": "*",
     "lodash": "*",
-    "react-native-appsflyer": ">=6.9.4",
     "react-native-code-push": ">=7.0.5",
     "react-native-device-info": "^10.6.0",
     "react-native-fast-image": "^8.6.3",
-    "react-native-fbsdk-next": "^11.2.1",
     "react-native-haptic-feedback": "^2.0.3",
     "react-native-localize": "^2.2.1",
     "react-native-mixed-splash": "^1.0.0",

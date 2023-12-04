@@ -1,16 +1,26 @@
-import { Amplitude as AmplitudeDefault, Identify } from '@amplitude/react-native';
 import { isIOS } from '@lomray/react-native-layout-helper';
 import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import _ from 'lodash';
 import type { ConversionData } from 'react-native-appsflyer';
-import appsFlyer from 'react-native-appsflyer';
 import DeviceInfo from 'react-native-device-info';
-import { Settings, AppEventsLogger } from 'react-native-fbsdk-next';
 import { getTrackingStatus, requestTrackingPermission } from 'react-native-tracking-transparency';
 import Config from './config';
 import type { ILogType } from './log';
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type FacebookSDK = typeof import('react-native-fbsdk-next');
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type AmplitudeSDK = typeof import('@amplitude/react-native');
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type AppsFlyerSDK = typeof import('react-native-appsflyer');
+
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (
+  ...args: any
+) => infer R
+  ? R
+  : any;
 
 enum APP_EVENT {
   APP_START = 'app_start',
@@ -32,28 +42,34 @@ enum APP_EVENT {
 }
 
 interface IAnalyticsParams {
-  amplitudeToken: string;
-  appsFlyerToken: string;
-  appsFlyerId: string;
+  sdk: {
+    facebook?: FacebookSDK;
+    amplitude?: AmplitudeSDK;
+    appsflyer?: AppsFlyerSDK['default'];
+  };
+  amplitudeToken?: string;
+  appsFlyerToken?: string;
+  appsFlyerId?: string;
+  hasRegisterDeepLinkListeners?: boolean;
   isATT?: boolean;
   onATT?: (isAllow: boolean) => void;
   onTrackUser?: (
     user: Record<string, any>,
     params: {
-      amplitude: Identify;
       google: FirebaseAnalyticsTypes.Module;
-      fb: typeof AppEventsLogger;
-      appsFlyer: typeof appsFlyer;
+      amplitude?: InstanceType<AmplitudeSDK['Identify']>;
+      fb?: FacebookSDK['AppEventsLogger'];
+      appsFlyer?: AppsFlyerSDK['default'];
     },
   ) => boolean;
   onTrackEvent?: (
     eventName: string,
     props: Record<string, any>,
     params: {
-      amplitude: AmplitudeDefault;
       google: FirebaseAnalyticsTypes.Module;
-      fb: typeof AppEventsLogger;
-      appsFlyer: typeof appsFlyer;
+      amplitude?: ReturnType<AmplitudeSDK['Amplitude']['getInstance']>;
+      appsFlyer?: AppsFlyerSDK['default'];
+      fb?: FacebookSDK['AppEventsLogger'];
     },
   ) => void;
 }
@@ -68,6 +84,11 @@ class Analytics {
   protected static instance: Analytics | null = null;
 
   /**
+   * Analytics available SDK's
+   */
+  protected sdk: IAnalyticsParams['sdk'];
+
+  /**
    * Disable analytics
    * @protected
    */
@@ -75,27 +96,28 @@ class Analytics {
 
   /**
    * Production env
-   * @protected
    */
   protected isProd = false;
 
   /**
    * Amplitude token
-   * @protected
    */
-  protected amplitudeToken: string;
+  protected amplitudeToken?: string;
 
   /**
    * AppsFlyer token
-   * @protected
    */
-  protected appsFlyerToken: string;
+  protected appsFlyerToken?: string;
 
   /**
    * AppsFlyer app id
-   * @protected
    */
-  protected appsFlyerId: string;
+  protected appsFlyerId?: string;
+
+  /**
+   * Register deep ling listeners
+   */
+  protected hasRegisterDeepLinkListeners: boolean;
 
   /**
    * @private
@@ -104,7 +126,6 @@ class Analytics {
 
   /**
    * Enable check app tracking transparency
-   * @protected
    */
   protected isATT = true;
 
@@ -142,6 +163,7 @@ class Analytics {
    * @private
    */
   private constructor({
+    sdk,
     amplitudeToken,
     appsFlyerToken,
     appsFlyerId,
@@ -149,13 +171,16 @@ class Analytics {
     onATT,
     onTrackUser,
     onTrackEvent,
+    hasRegisterDeepLinkListeners = false,
   }: IAnalyticsParams) {
     this.isDisabled = !Config.get('isProdDeployment');
     this.isProd = Config.get('isProd', false)!;
     this.logger = Config.get('logger');
+    this.sdk = sdk;
     this.amplitudeToken = amplitudeToken;
     this.appsFlyerToken = appsFlyerToken;
     this.appsFlyerId = appsFlyerId;
+    this.hasRegisterDeepLinkListeners = hasRegisterDeepLinkListeners;
     this.isATT = isATT ?? true;
     this.onATT = onATT;
     this.onTrackUser = onTrackUser;
@@ -165,13 +190,12 @@ class Analytics {
   /**
    * Init analytics
    */
-  public static init(params: IAnalyticsParams) {
+  public static init(params: IAnalyticsParams): ReturnType<Analytics['initialize']> {
     if (this.instance === null) {
       this.instance = new Analytics(params);
-      this.instance.initialize();
     }
 
-    return this.instance;
+    return this.instance.initialize();
   }
 
   /**
@@ -188,10 +212,19 @@ class Analytics {
   /**
    * Add deep link listeners
    */
-  public static registerDeepLinkListeners(): () => void {
-    return appsFlyer.onInstallConversionData((res) => {
+  protected registerDeepLinkListeners(): () => void {
+    if (!this.hasRegisterDeepLinkListeners) {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      return _.noop;
+    }
+
+    const unsubscribe = this.sdk.appsflyer?.onInstallConversionData((res) => {
       Analytics.deepLinkData = res.data;
     });
+
+    return () => {
+      unsubscribe?.();
+    };
   }
 
   /**
@@ -205,32 +238,61 @@ class Analytics {
    * Initialize analytics, show permission modals
    * @protected
    */
-  protected initialize(): void {
+  protected initialize(): Promise<unknown[] | boolean | [boolean, any]> {
     if (this.isDisabled) {
-      return;
+      return Promise.resolve(false);
     }
 
-    const Amplitude = AmplitudeDefault.getInstance();
+    this.sdk.facebook?.Settings.initializeSDK();
 
-    void Amplitude.init(this.amplitudeToken);
-    Settings.initializeSDK();
-    appsFlyer.initSdk(
-      {
-        devKey: this.appsFlyerToken,
-        isDebug: !this.isProd,
-        appId: this.appsFlyerId,
-        manualStart: true,
-        onInstallConversionDataListener: true,
-        onDeepLinkListener: false,
-        timeToWaitForATTUserAuthorization: 10,
-      },
-      (result) => {
-        this.logger?.info('AppsFlyer success initialize: ', result);
-      },
-      (error) => {
-        this.logger?.warn('AppsFlyer failed initialize: ', error);
-      },
-    );
+    const result = [];
+    const Amplitude = this.sdk.amplitude?.Amplitude.getInstance();
+
+    if (Amplitude && this.amplitudeToken) {
+      result.push(
+        Amplitude.init(this.amplitudeToken)
+          .then((value) => {
+            this.logger?.info('Amplitude success initialize: ', value);
+
+            return value;
+          })
+          .catch((e) => {
+            this.logger?.warn('Amplitude failed initialize: ', e);
+
+            return false;
+          }),
+      );
+    }
+
+    if (this.appsFlyerId && this.appsFlyerToken && this.sdk.appsflyer) {
+      result.push(
+        new Promise((resolve) => {
+          this.sdk.appsflyer!.initSdk(
+            {
+              devKey: this.appsFlyerToken!,
+              isDebug: !this.isProd,
+              appId: this.appsFlyerId,
+              manualStart: true,
+              onInstallConversionDataListener: true,
+              onDeepLinkListener: false,
+              timeToWaitForATTUserAuthorization: 10,
+            },
+            (res) => {
+              this.logger?.info('AppsFlyer success initialize: ', res);
+
+              resolve(res);
+            },
+            (error) => {
+              this.logger?.warn('AppsFlyer failed initialize: ', error);
+
+              resolve(false);
+            },
+          );
+        }),
+      );
+    }
+
+    return Promise.all(result);
   }
 
   /**
@@ -246,9 +308,9 @@ class Analytics {
           return;
         }
 
-        void Settings.setAdvertiserTrackingEnabled(true);
+        void this.sdk.facebook?.Settings.setAdvertiserTrackingEnabled(true);
         void analytics().setAnalyticsCollectionEnabled(this.isProd);
-        void AmplitudeDefault.getInstance().setDeviceId(DeviceInfo.getUniqueIdSync());
+        void this.sdk.amplitude?.Amplitude.getInstance().setDeviceId(DeviceInfo.getUniqueIdSync());
       });
     } catch (e) {
       this.logger?.info('Request app tracking transparency failed.', e);
@@ -257,7 +319,6 @@ class Analytics {
 
   /**
    * Check APP TRACKING TRANSPARENCY
-   * @protected
    */
   protected async checkATT(): Promise<boolean> {
     if (!isIOS || !this.isATT) {
@@ -279,7 +340,7 @@ class Analytics {
   }
 
   /**
-   * @protected
+   * Set user
    */
   protected setUser(user: Record<string, any>): void {
     if (this.isDisabled || !this.isATT) {
@@ -290,7 +351,7 @@ class Analytics {
       return;
     }
 
-    const Amplitude = AmplitudeDefault.getInstance();
+    const Amplitude = this.sdk.amplitude?.Amplitude.getInstance();
 
     void this.checkATT().then((result) => {
       if (!result || !user) {
@@ -299,20 +360,20 @@ class Analytics {
 
       const { id, ...properties } = user;
 
-      const userId = id as string;
-      const identify = new Identify();
+      const userId = String(id);
+      const identify = this.sdk.amplitude ? new this.sdk.amplitude.Identify() : undefined;
 
       const shouldSkip = this.onTrackUser?.(user, {
         amplitude: identify,
         google: analytics(),
-        fb: AppEventsLogger,
-        appsFlyer,
+        fb: this.sdk.facebook?.AppEventsLogger,
+        appsFlyer: this.sdk.appsflyer,
       });
 
       if (!shouldSkip) {
         void analytics().setUserProperties(properties);
-        void Amplitude.setUserProperties(properties);
-        AppEventsLogger.setUserData(
+        void Amplitude?.setUserProperties(properties);
+        this.sdk.facebook?.AppEventsLogger.setUserData(
           _.pick(properties, [
             'email',
             'firstName',
@@ -328,11 +389,11 @@ class Analytics {
         );
       }
 
-      void Amplitude.setUserId(userId);
-      void Amplitude.identify(identify);
+      void Amplitude?.setUserId(userId);
+      void Amplitude?.identify(identify!);
       void crashlytics().setUserId(userId);
-      AppEventsLogger.setUserID(userId);
-      appsFlyer.setCustomerUserId(userId);
+      this.sdk.facebook?.AppEventsLogger.setUserID(userId);
+      this.sdk.appsflyer?.setCustomerUserId(userId);
     });
   }
 
@@ -345,13 +406,13 @@ class Analytics {
       return;
     }
 
-    const Amplitude = AmplitudeDefault.getInstance();
+    const Amplitude = this.sdk.amplitude?.Amplitude.getInstance();
     const shouldSkip =
       this.onTrackEvent?.(eventName, props, {
         google: analytics(),
         amplitude: Amplitude,
-        fb: AppEventsLogger,
-        appsFlyer,
+        fb: this.sdk.facebook?.AppEventsLogger,
+        appsFlyer: this.sdk.appsflyer,
       }) ?? false;
 
     if (shouldSkip) {
@@ -387,10 +448,10 @@ class Analytics {
         const count = Number(props.count || 1);
         const extraParams = (props.params || {}) as Record<string, any>;
 
-        void Amplitude.logRevenue({ price, quantity: count, eventProperties: extraParams });
+        void Amplitude?.logRevenue({ price, quantity: count, eventProperties: extraParams });
         void analytics().logPurchase({ value: price, currency });
-        AppEventsLogger.logPurchase(price, currency, extraParams);
-        void appsFlyer.logEvent('af_subscribe', {
+        this.sdk.facebook?.AppEventsLogger.logPurchase(price, currency, extraParams);
+        void this.sdk.appsflyer?.logEvent('af_subscribe', {
           // eslint-disable-next-line camelcase
           af_revenue: price,
           // eslint-disable-next-line camelcase
@@ -401,14 +462,14 @@ class Analytics {
 
       case APP_EVENT.APP_START:
         Object.assign(props, Analytics.deepLinkData);
-        appsFlyer.startSdk();
+        this.sdk.appsflyer?.startSdk();
         break;
     }
 
-    void Amplitude.logEvent(eventName, props);
-    AppEventsLogger.logEvent(eventName, props);
+    void Amplitude?.logEvent(eventName, props);
+    this.sdk.facebook?.AppEventsLogger.logEvent(eventName, props);
     void analytics().logEvent(eventName, props);
-    void appsFlyer.logEvent(eventName, props);
+    void this.sdk.appsflyer?.logEvent(eventName, props);
   }
 
   /**
