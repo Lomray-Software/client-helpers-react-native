@@ -17,7 +17,16 @@ export default {
     preserveModulesRoot: 'src',
     exports: 'auto',
   },
-  external: ['axios', 'lodash', 'react', 'react-native', 'mobx', 'reactotron-core-client', '@lomray/react-mobx-manager'],
+  external: [
+    'axios',
+    'lodash',
+    'react',
+    'react-native',
+    'mobx',
+    'reactotron-core-client',
+    '@lomray/react-mobx-manager',
+    'react-native-fbsdk-next',
+  ],
   plugins: [
     folderInput(),
     typescript({
@@ -62,6 +71,7 @@ export default {
         { src: 'typings/**/*', dest: 'lib/typings' },
         { src: 'src/scripts/**/*', dest: 'lib/scripts' },
         { src: 'package.json', dest: 'lib' },
+        { src: 'README.md', dest: 'lib' },
       ]
     })
   ],
