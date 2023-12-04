@@ -115,9 +115,9 @@ class Analytics {
   protected appsFlyerId?: string;
 
   /**
-   * Register deep ling listeners
+   * Registered deep ling listeners
    */
-  protected hasRegisterDeepLinkListeners: boolean;
+  protected unsubscribeDeepLinkListeners: () => void;
 
   /**
    * @private
@@ -171,7 +171,6 @@ class Analytics {
     onATT,
     onTrackUser,
     onTrackEvent,
-    hasRegisterDeepLinkListeners = false,
   }: IAnalyticsParams) {
     this.isDisabled = !Config.get('isProdDeployment');
     this.isProd = Config.get('isProd', false)!;
@@ -180,7 +179,6 @@ class Analytics {
     this.amplitudeToken = amplitudeToken;
     this.appsFlyerToken = appsFlyerToken;
     this.appsFlyerId = appsFlyerId;
-    this.hasRegisterDeepLinkListeners = hasRegisterDeepLinkListeners;
     this.isATT = isATT ?? true;
     this.onATT = onATT;
     this.onTrackUser = onTrackUser;
@@ -190,9 +188,16 @@ class Analytics {
   /**
    * Init analytics
    */
-  public static init(params: IAnalyticsParams): ReturnType<Analytics['initialize']> {
+  public static init({
+    hasRegisterDeepLinkListeners = false,
+    ...params
+  }: IAnalyticsParams): ReturnType<Analytics['initialize']> {
     if (this.instance === null) {
       this.instance = new Analytics(params);
+
+      if (hasRegisterDeepLinkListeners) {
+        this.instance.unsubscribeDeepLinkListeners = this.instance.registerDeepLinkListeners();
+      }
     }
 
     return this.instance.initialize();
@@ -213,11 +218,6 @@ class Analytics {
    * Add deep link listeners
    */
   protected registerDeepLinkListeners(): () => void {
-    if (!this.hasRegisterDeepLinkListeners) {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      return _.noop;
-    }
-
     const unsubscribe = this.sdk.appsflyer?.onInstallConversionData((res) => {
       Analytics.deepLinkData = res.data;
     });
