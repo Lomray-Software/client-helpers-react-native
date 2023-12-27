@@ -2,7 +2,6 @@ import typescript from 'rollup-plugin-ts';
 import json from '@rollup/plugin-json';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { folderInput } from 'rollup-plugin-folder-input';
-import terser from '@rollup/plugin-terser';
 import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
 
@@ -59,10 +58,6 @@ export default {
       includeDependencies: true,
     }),
     json(),
-    terser({
-      keep_classnames: true,
-      keep_fnames: true,
-    }),
     copy({
       targets: [
         { src: 'typings/**/*', dest: 'lib/typings' },
