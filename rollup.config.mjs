@@ -12,7 +12,7 @@ export default {
   ],
   output: {
     dir: 'lib',
-    format: 'cjs',
+    format: 'es',
     sourcemap: true,
     preserveModules: true,
     preserveModulesRoot: 'src',
@@ -29,6 +29,10 @@ export default {
     'react-native-fbsdk-next',
     '@invertase/react-native-apple-authentication',
     '@react-native-google-signin/google-signin',
+    'react-native-webview',
+    'react-native-fast-image',
+    'react-native-svg',
+    '@react-native-community/netinfo',
   ],
   plugins: [
     folderInput(),
