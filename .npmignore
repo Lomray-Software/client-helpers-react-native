@@ -12,7 +12,7 @@ coverage
 .eslintrc.js
 .lintstagedrc.js
 commitlint.config.js
-rollup.config.js
+rollup.config.mjs
 .prettierrc.js
 sonar-project.properties
 tsconfig.json

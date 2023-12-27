@@ -2,7 +2,7 @@
 import { NativeModules } from 'react-native'
 import { ArgType } from 'reactotron-core-client'
 import Reactotron from 'reactotron-react-native'
-import MobxStoreManagerPlugin from "@lomray/reactotron-mobx-store-manager";
+import MobxStoreManagerPlugin from '@lomray/reactotron-mobx-store-manager';
 
 interface IConfig {
   isDebug: boolean;
@@ -32,12 +32,12 @@ const init = ({ isDebug, AsyncStorage, isTests = false }: IConfig) => {
   }
 
   const reactotron = Reactotron
-    .configure() // controls connection & communication settings
+    .configure()
     .useReactNative({
       networking: {
         ignoreUrls: /(https:\/\/clients3.google.com\/generate_204)/,
       }
-    }) // add all built-in react native plugins
+    })
     .use(MobxStoreManagerPlugin())
     .connect() // let's connect!
 

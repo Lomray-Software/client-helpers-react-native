@@ -3,6 +3,7 @@ import json from '@rollup/plugin-json';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { folderInput } from 'rollup-plugin-folder-input';
 import terser from '@rollup/plugin-terser';
+import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
 
 export default {
@@ -26,26 +27,12 @@ export default {
     'reactotron-core-client',
     '@lomray/react-mobx-manager',
     'react-native-fbsdk-next',
+    '@invertase/react-native-apple-authentication',
+    '@react-native-google-signin/google-signin',
   ],
   plugins: [
     folderInput(),
     typescript({
-      transpiler: {
-        typescriptSyntax: 'typescript',
-        otherSyntax: 'babel'
-      },
-      babelConfig: {
-        presets: [
-          '@babel/preset-env',
-          '@babel/preset-react'
-        ],
-        plugins: [
-          ['@babel/plugin-proposal-class-properties'],
-          ['@babel/plugin-transform-runtime', {
-            "absoluteRuntime": false,
-          }],
-        ],
-      },
       tsconfig: resolvedConfig => ({
         ...resolvedConfig,
         declaration: true,
@@ -57,6 +44,12 @@ export default {
           }
         ]
       }),
+    }),
+    babel({
+      exclude: 'node_modules/**',
+      include: ['src/**/*'],
+      babelHelpers: 'bundled',
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
     peerDepsExternal({
       includeDependencies: true,

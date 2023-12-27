@@ -3,15 +3,14 @@ import _ from 'lodash';
 import type { ComponentType, ReactElement, Ref } from 'react';
 import React, { useCallback, useRef, forwardRef } from 'react';
 import type { FlatListProps, ImageSourcePropType } from 'react-native';
-import type { AnimateProps } from 'react-native-reanimated';
-// eslint-disable-next-line import/default
-import Animated, { Layout, FadeIn } from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
+import Animated, { LinearTransition, FadeIn } from 'react-native-reanimated';
 import Placeholder from '../placeholders/frame';
 import Empty from './empty';
 import Footer from './footer';
 
 export interface IFlatList<TEntity = Record<string, any>>
-  extends AnimateProps<FlatListProps<TEntity>> {
+  extends AnimatedProps<FlatListProps<TEntity>> {
   emptyListTitle?: string;
   emptyListText?: string;
   emptyListImg?: ImageSourcePropType;
@@ -19,7 +18,7 @@ export interface IFlatList<TEntity = Record<string, any>>
   isFetching?: boolean;
   isFirstRender?: boolean;
   placeholderCount?: number;
-  placeholderContainerStyle?: Animated.AnimateProps<any>['style'];
+  placeholderContainerStyle?: AnimatedProps<any>['style'];
   EmptyComponent?: ReactElement | false;
   PlaceholderComponent?: ReactElement | ComponentType;
   onRefresh?:
@@ -98,7 +97,7 @@ const FlatList = <TEntity, TRef>(
         PlaceholderComponent={PlaceholderComponent}
       />
       {!isFirstRender && (
-        <Animated.FlatList<TEntity>
+        <Animated.FlatList
           ref={ref as never}
           entering={FadeIn}
           data={data}
@@ -106,7 +105,7 @@ const FlatList = <TEntity, TRef>(
           initialNumToRender={initialNumToRender}
           onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
-          layout={Layout.duration(300)}
+          layout={LinearTransition.duration(300)}
           onScrollBeginDrag={onMomentumScrollBegin}
           onEndReached={onEndReachedThrottled}
           ListFooterComponent={

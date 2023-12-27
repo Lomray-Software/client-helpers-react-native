@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "noEmit": true,
@@ -18,7 +19,8 @@
       "dom",
       "webworker"
     ],
-    "module": "CommonJS",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -31,24 +33,15 @@
     "pretty": true,
     "suppressImplicitAnyIndexErrors": true,
     "useDefineForClassFields": true,
-    "target": "ESNext",
     "baseUrl": "./src",
     "paths": {},
     "jsx": "react-native"
   },
   "exclude": [
     "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "public/lib",
-    "node_modules",
-    "build",
     "lib",
+    "scripts",
     "commitlint.config.js",
-    "nyc.config.js",
-    "rollup.config.js"
+    "rollup.config.mjs"
   ]
 }
