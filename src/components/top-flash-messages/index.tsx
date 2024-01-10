@@ -1,6 +1,6 @@
 import { fs } from '@lomray/react-native-layout-helper';
 import type { MessageOptions } from 'react-native-flash-message';
-import { showMessage } from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import type { IConfigParams } from '../../services/config';
 import Config from '../../services/config';
 
@@ -35,4 +35,4 @@ const showTopFlashMessage = (msgOptions: MessageOptions): void => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export { showTopFlashMessage };
+export { showTopFlashMessage, hideMessage };
