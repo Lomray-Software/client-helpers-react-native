@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
+import type { TextProps } from 'react-native/Libraries/Text/Text';
 import type { NavigationFunctionComponent } from 'react-native-navigation';
 import { Navigation } from 'react-native-navigation';
 import styles from './styles';
@@ -9,6 +10,8 @@ import styles from './styles';
 interface ISlideModal {
   title: string;
   textDone?: string;
+  textProps?: TextProps;
+  titleProps?: TextProps;
   titleWrapperStyle?: StyleProp<ViewStyle>;
   titleStyle?: StyleProp<TextStyle>;
   doneStyle?: StyleProp<TextStyle>;
@@ -25,19 +28,21 @@ const SlideModal: NavigationFunctionComponent<ISlideModal> = ({
   children,
   titleWrapperStyle,
   titleStyle,
+  textProps,
+  titleProps,
   doneStyle,
   textDone = 'Done',
 }) => (
   <View style={styles.container}>
     <View style={[styles.titleWrapper, titleWrapperStyle]}>
-      <Text style={[styles.title, titleStyle]} allowFontScaling={false}>
+      <Text style={[styles.title, titleStyle]} allowFontScaling={false} {...titleProps}>
         {title}
       </Text>
       <TouchableOpacity
         onPress={() => void Navigation.dismissModal(componentId)}
         style={styles.doneWrapper}
       >
-        <Text style={[styles.done, doneStyle]} allowFontScaling={false}>
+        <Text style={[styles.done, doneStyle]} allowFontScaling={false} {...textProps}>
           {textDone}
         </Text>
       </TouchableOpacity>
