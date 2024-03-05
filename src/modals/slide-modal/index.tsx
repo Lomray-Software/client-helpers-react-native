@@ -1,10 +1,9 @@
+import type { FCC } from '@lomray/client-helpers/interfaces';
 import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
 import type { TextProps } from 'react-native/Libraries/Text/Text';
-import type { NavigationFunctionComponent } from 'react-native-navigation';
-import { Navigation } from 'react-native-navigation';
 import styles from './styles';
 
 interface ISlideModal {
@@ -15,6 +14,7 @@ interface ISlideModal {
   titleWrapperStyle?: StyleProp<ViewStyle>;
   titleStyle?: StyleProp<TextStyle>;
   doneStyle?: StyleProp<TextStyle>;
+  onClose: () => Promise<void> | void;
   children: ReactNode;
 }
 
@@ -22,8 +22,7 @@ interface ISlideModal {
  * Custom slide modal component.
  * Show this modal via Navigation.showModal.
  */
-const SlideModal: NavigationFunctionComponent<ISlideModal> = ({
-  componentId,
+const SlideModal: FCC<ISlideModal> = ({
   title,
   children,
   titleWrapperStyle,
@@ -31,6 +30,7 @@ const SlideModal: NavigationFunctionComponent<ISlideModal> = ({
   textProps,
   titleProps,
   doneStyle,
+  onClose,
   textDone = 'Done',
 }) => (
   <View style={styles.container}>
@@ -38,10 +38,7 @@ const SlideModal: NavigationFunctionComponent<ISlideModal> = ({
       <Text style={[styles.title, titleStyle]} allowFontScaling={false} {...titleProps}>
         {title}
       </Text>
-      <TouchableOpacity
-        onPress={() => void Navigation.dismissModal(componentId)}
-        style={styles.doneWrapper}
-      >
+      <TouchableOpacity onPress={() => void onClose()} style={styles.doneWrapper}>
         <Text style={[styles.done, doneStyle]} allowFontScaling={false} {...textProps}>
           {textDone}
         </Text>
