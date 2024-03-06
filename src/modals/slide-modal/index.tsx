@@ -1,9 +1,8 @@
 import type { FCC } from '@lomray/client-helpers/interfaces';
 import type { ReactNode } from 'react';
 import React from 'react';
-import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
-import type { TextProps } from 'react-native/Libraries/Text/Text';
+import type { StyleProp, ViewStyle, TextStyle, TextProps } from 'react-native';
 import styles from './styles';
 
 interface ISlideModal {

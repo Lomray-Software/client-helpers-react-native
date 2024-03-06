@@ -1,7 +1,6 @@
 import { Navigation } from 'react-native-navigation';
 import type { ComponentDidAppearEvent } from 'react-native-navigation';
 import Config from '../../services/config';
-import NavigationService from '../../services/navigation';
 
 enum EventScreen {
   overlay = 'overlay',
@@ -34,7 +33,6 @@ const HandleChangeScreen = ({
 
     if (hiddenOverlays.includes(componentName)) {
       // Overlay open
-      NavigationService.setOverlayInfo(componentId, componentName);
       logger?.info(`View overlay: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.overlay, params);
 
@@ -43,7 +41,6 @@ const HandleChangeScreen = ({
 
     if (hiddenModals.includes(componentName)) {
       // Modal change
-      NavigationService.setModalInfo(componentId, componentName);
       logger?.info(`View modal: ${componentName}. Id: ${componentId}`);
       callback?.(EventScreen.modal, params);
 
@@ -51,28 +48,9 @@ const HandleChangeScreen = ({
     }
 
     // Screen change (push)
-    NavigationService.setComponentInfo(componentId, componentName);
     logger?.info(`View screen: ${componentName}. Id: ${componentId}`);
     callback?.(EventScreen.screen, params);
   });
-
-  Navigation.events().registerComponentDidDisappearListener(({ componentId, componentName }) => {
-    // Overlay close
-    if (hiddenOverlays.includes(componentName)) {
-      NavigationService.closeOverlay(componentId, componentName);
-    }
-  });
-
-  Navigation.events().registerModalDismissedListener(({ componentId, componentName }) => {
-    // Modal close
-    NavigationService.closeModal(componentId, componentName);
-  });
-
-  Navigation.events().registerBottomTabSelectedListener(
-    ({ selectedTabIndex, unselectedTabIndex }) => {
-      NavigationService.setBottomTabInfo(selectedTabIndex, unselectedTabIndex);
-    },
-  );
 };
 
 export { EventScreen, HandleChangeScreen };
