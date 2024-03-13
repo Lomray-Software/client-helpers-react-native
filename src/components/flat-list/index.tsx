@@ -11,6 +11,7 @@ import Footer from './footer';
 
 export interface IFlatList<TEntity = Record<string, any>>
   extends AnimatedProps<FlatListProps<TEntity>> {
+  hasLayoutAnimation?: boolean;
   emptyListTitle?: string;
   emptyListText?: string;
   emptyListImg?: ImageSourcePropType;
@@ -44,6 +45,7 @@ const FlatList = <TEntity, TRef>(
     placeholderCount,
     placeholderContainerStyle,
     totalEntities = 0,
+    hasLayoutAnimation = true,
     isFetching = false,
     isFirstRender = false,
     initialNumToRender = 5,
@@ -99,13 +101,17 @@ const FlatList = <TEntity, TRef>(
       {!isFirstRender && (
         <Animated.FlatList
           ref={ref as never}
-          entering={FadeIn}
           data={data}
           refreshing={isFetching}
           initialNumToRender={initialNumToRender}
           onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
-          layout={LinearTransition.duration(300)}
+          {...(hasLayoutAnimation
+            ? {
+                entering: FadeIn,
+                layout: LinearTransition.duration(300),
+              }
+            : {})}
           onScrollBeginDrag={onMomentumScrollBegin}
           onEndReached={onEndReachedThrottled}
           ListFooterComponent={

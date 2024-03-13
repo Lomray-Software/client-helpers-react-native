@@ -1,3 +1,4 @@
+import wait from '@lomray/client-helpers/helpers/wait';
 import _ from 'lodash';
 import { action, makeObservable, observable, runInAction } from 'mobx';
 
@@ -19,6 +20,10 @@ interface IFlatListStoreParams<TEntity> {
   getEntities: (page?: number) => Promise<IRequestReturn<TEntity>>;
   keyName?: string;
   pageSize?: number;
+  /**
+   * First request delay to prevent flickering
+   */
+  firstDelay?: number;
 }
 
 /**
@@ -65,6 +70,11 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   private readonly keyName: string;
 
   /**
+   * Delay first request to prevent flickering
+   */
+  private readonly firstDelay;
+
+  /**
    * Get flat list entities
    * @private
    */
@@ -76,6 +86,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   constructor({
     getEntities,
     entities,
+    firstDelay = 0,
     totalEntities = 0,
     initPage = 1,
     pageSize = 10,
@@ -87,6 +98,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
     this.currentPage = initPage;
     this.pageSize = pageSize;
     this.keyName = keyName;
+    this.firstDelay = firstDelay;
 
     makeObservable(this, {
       entities: observable,
@@ -130,6 +142,10 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
       this.setFetching(true);
 
       const result = await callback(pageVal);
+
+      if (this.firstDelay) {
+        await wait(this.firstDelay);
+      }
 
       runInAction(() => {
         this.setFetching(false);
