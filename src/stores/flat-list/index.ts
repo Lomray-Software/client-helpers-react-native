@@ -141,9 +141,10 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
     return async (pageVal) => {
       this.setFetching(true);
 
+      const startTime = Date.now();
       const result = await callback(pageVal);
 
-      if (this.firstDelay) {
+      if (this.firstDelay && Date.now() - startTime < this.firstDelay) {
         await wait(this.firstDelay);
       }
 
