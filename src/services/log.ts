@@ -33,10 +33,14 @@ const firebaseCrashlyticsTransport = (
 ): void => {
   crashlytics.log(msg as string);
 
-  const error = rawMsg?.[1] ?? null;
+  try {
+    crashlytics.log(JSON.stringify(rawMsg));
+  } catch (e) {
+    // skip
+  }
 
-  if (level.text === 'error' && error?.message) {
-    crashlytics.recordError(error as Error);
+  if (level.text === 'error' && msg) {
+    crashlytics.recordError(new Error(msg as string));
   }
 };
 
