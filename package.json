@@ -97,7 +97,7 @@
     "react-native-code-push": ">=7.0.5",
     "react-native-device-info": ">=10.6.0",
     "react-native-haptic-feedback": ">=2.0.3",
-    "react-native-localize": "^2.2.1",
+    "react-native-localize": "^3.0.6",
     "react-native-mixed-splash": "^1.0.0",
     "react-native-navigation": ">=7.32.1",
     "react-native-reanimated": ">=3.6.1",
