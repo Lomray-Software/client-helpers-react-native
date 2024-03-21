@@ -4,7 +4,10 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 
 export type IRequestReturn<TEntity> = { count: number; list: TEntity[]; page: number } | undefined;
 
-interface IFlatListStoreParams<TEntity> {
+export type TGetEntities<TEntity> = (page?: number) => Promise<IRequestReturn<TEntity>>;
+
+export interface IFlatListStoreParams<TEntity, TStore> {
+  method: keyof TStore;
   /**
    * Initial entities
    */
@@ -17,8 +20,7 @@ interface IFlatListStoreParams<TEntity> {
    * Initial page
    */
   initPage?: number;
-  getEntities: (page?: number) => Promise<IRequestReturn<TEntity>>;
-  keyName?: string;
+  keyName?: keyof TEntity;
   pageSize?: number;
   /**
    * First request delay to prevent flickering
@@ -29,7 +31,7 @@ interface IFlatListStoreParams<TEntity> {
 /**
  * Flat list store
  */
-class FlatListStore<TEntity, TExtractor = TEntity> {
+class FlatListStore<TEntity, TExtractor = TEntity, TStore = never> {
   /**
    * List of entities
    */
@@ -42,7 +44,6 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
 
   /**
    * Indicates than flat list renders first time
-   * @private
    */
   public isFirstRender = true;
 
@@ -53,19 +54,16 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
 
   /**
    * Current page
-   * @private
    */
   private currentPage = 1;
 
   /**
    * Default page size
-   * @private
    */
   public pageSize = 10;
 
   /**
    * Key extractor property name
-   * @private
    */
   private readonly keyName: string;
 
@@ -75,29 +73,41 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   private readonly firstDelay;
 
   /**
-   * Get flat list entities
+   * Get flat list entities method
+   */
+  private readonly method: IFlatListStoreParams<TEntity, TStore>['method'];
+
+  /**
    * @private
    */
-  public readonly getEntities: IFlatListStoreParams<TEntity>['getEntities'];
+  private readonly store: TStore;
 
   /**
    * @constructor
    */
-  constructor({
-    getEntities,
-    entities,
-    firstDelay = 0,
-    totalEntities = 0,
-    initPage = 1,
-    pageSize = 10,
-    keyName = 'id',
-  }: IFlatListStoreParams<TEntity>) {
-    this.getEntities = this.wrapRequest(getEntities);
+  constructor(
+    store: TStore,
+    {
+      method,
+      entities,
+      firstDelay = 0,
+      totalEntities = 0,
+      initPage = 1,
+      pageSize = 10,
+      keyName,
+    }: IFlatListStoreParams<TEntity, TStore>,
+  ) {
+    // @ts-ignore
+    store[method] = this.wrapRequest(store[method]);
+
+    this.store = store;
+    this.method = method;
     this.entities = entities ?? [];
     this.totalEntities = totalEntities;
     this.currentPage = initPage;
     this.pageSize = pageSize;
-    this.keyName = keyName;
+    // @ts-ignore
+    this.keyName = keyName || 'id';
     this.firstDelay = firstDelay;
 
     makeObservable(this, {
@@ -135,9 +145,7 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
   /**
    * Wrapper for get entities
    */
-  public wrapRequest(
-    callback: IFlatListStoreParams<TEntity>['getEntities'],
-  ): IFlatListStoreParams<TEntity>['getEntities'] {
+  public wrapRequest(callback: TGetEntities<TEntity>): TGetEntities<TEntity> {
     return async (pageVal) => {
       this.setFetching(true);
 
@@ -198,7 +206,8 @@ class FlatListStore<TEntity, TExtractor = TEntity> {
       return;
     }
 
-    return this.getEntities(this.currentPage + 1);
+    // @ts-ignore
+    return this.store[this.method](this.currentPage + 1) as Promise<IRequestReturn<TEntity>>;
   }
 
   /**
