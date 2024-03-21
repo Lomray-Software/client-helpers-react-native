@@ -26,7 +26,7 @@ export interface IFlatList<TEntity = Record<string, any>>
     | ReplaceReturnType<NonNullable<FlatListProps<TEntity>['onRefresh']>, Promise<any>>
     | FlatListProps<TEntity>['onRefresh'];
   onEndReached?: FlatListProps<TEntity>['onEndReached'];
-  onEndReachedAsync?: () => Promise<any>;
+  onEndReachedAsync?: () => Promise<any> | undefined | void;
 }
 
 /**
