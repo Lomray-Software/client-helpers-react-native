@@ -23,6 +23,8 @@ export default {
     'react',
     'react-native',
     'mobx',
+    'i18next',
+    'react-i18next',
     'reactotron-core-client',
     '@lomray/react-mobx-manager',
     'react-native-fbsdk-next',
