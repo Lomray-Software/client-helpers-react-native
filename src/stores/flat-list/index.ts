@@ -143,6 +143,13 @@ class FlatListStore<TEntity, TExtractor = TEntity, TStore = never> {
   }
 
   /**
+   * Get entities
+   */
+  public getEntities = (page = 1): Promise<IRequestReturn<TEntity>> =>
+    // @ts-ignore
+    this.store[this.method](page) as Promise<IRequestReturn<TEntity>>;
+
+  /**
    * Wrapper for get entities
    */
   public wrapRequest(callback: TGetEntities<TEntity>): TGetEntities<TEntity> {
@@ -206,8 +213,7 @@ class FlatListStore<TEntity, TExtractor = TEntity, TStore = never> {
       return;
     }
 
-    // @ts-ignore
-    return this.store[this.method](this.currentPage + 1) as Promise<IRequestReturn<TEntity>>;
+    return this.getEntities(this.currentPage + 1);
   }
 
   /**
