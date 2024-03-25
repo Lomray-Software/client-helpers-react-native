@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FCC } from '@lomray/client-helpers/interfaces';
 import { useEffect, useRef } from 'react';
 import { Navigation } from 'react-native-navigation';
 import { OVERLAY_ID, openHalfBottom } from './control';
@@ -14,7 +14,7 @@ export interface IBottomHalf extends Omit<IBottomHalfContainer, 'shouldClose'> {
  * Modal bottom half
  * @constructor
  */
-const BottomHalf: FC<IBottomHalf> = ({ isVisible, deps, ...props }) => {
+const BottomHalf: FCC<IBottomHalf> = ({ isVisible, deps, ...props }) => {
   const isOpened = useRef(false);
   const { id = OVERLAY_ID } = props;
 
