@@ -51,6 +51,7 @@ interface IAnalyticsParams {
   appsFlyerToken?: string;
   appsFlyerId?: string;
   hasRegisterDeepLinkListeners?: boolean;
+  isEnableCollection?: boolean;
   isATT?: boolean;
   onATT?: (isAllow: boolean) => void;
   onTrackUser?: (
@@ -130,6 +131,11 @@ class Analytics {
   protected isATT = true;
 
   /**
+   * Enable automatically analytic collection
+   */
+  protected isEnableCollection = true;
+
+  /**
    * ATT status
    * @protected
    */
@@ -167,6 +173,7 @@ class Analytics {
     amplitudeToken,
     appsFlyerToken,
     appsFlyerId,
+    isEnableCollection,
     isATT,
     onATT,
     onTrackUser,
@@ -180,6 +187,7 @@ class Analytics {
     this.appsFlyerToken = appsFlyerToken;
     this.appsFlyerId = appsFlyerId;
     this.isATT = isATT ?? true;
+    this.isEnableCollection = isEnableCollection ?? true;
     this.onATT = onATT;
     this.onTrackUser = onTrackUser;
     this.onTrackEvent = onTrackEvent;
@@ -238,9 +246,13 @@ class Analytics {
    * Initialize analytics, show permission modals
    * @protected
    */
-  protected initialize(): Promise<unknown[] | boolean | [boolean, any]> {
+  protected async initialize(): Promise<unknown[] | boolean | [boolean, any]> {
     if (this.isDisabled) {
       return Promise.resolve(false);
+    }
+
+    if (this.isEnableCollection) {
+      await analytics().setAnalyticsCollectionEnabled(true);
     }
 
     this.sdk.facebook?.Settings.initializeSDK();
