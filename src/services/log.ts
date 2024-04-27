@@ -111,7 +111,7 @@ const initLogger = ({
   crashlytics,
   hasTempMemoryTransport = true,
   params = {},
-}: ILoggerOptions): ILogType => {
+}: ILoggerOptions = {}): ILogType => {
   /**
    * Log payload
    */

@@ -1,7 +1,6 @@
 import { isIOS } from '@lomray/react-native-layout-helper';
 import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
 import _ from 'lodash';
 import type { ConversionData } from 'react-native-appsflyer';
 import DeviceInfo from 'react-native-device-info';
@@ -403,7 +402,6 @@ class Analytics {
 
       void Amplitude?.setUserId(userId);
       void Amplitude?.identify(identify!);
-      void crashlytics().setUserId(userId);
       this.sdk.facebook?.AppEventsLogger.setUserID(userId);
       this.sdk.appsflyer?.setCustomerUserId(userId);
     });

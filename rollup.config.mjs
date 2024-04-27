@@ -5,12 +5,14 @@ import { folderInput } from 'rollup-plugin-folder-input';
 import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
 
+const dest = 'lib';
+
 export default {
   input: [
     'src/**/*.ts*',
   ],
   output: {
-    dir: 'lib',
+    dir: dest,
     format: 'es',
     sourcemap: true,
     preserveModules: true,
@@ -62,10 +64,10 @@ export default {
     json(),
     copy({
       targets: [
-        { src: 'typings/**/*', dest: 'lib/typings' },
-        { src: 'src/scripts/**/*', dest: 'lib/scripts' },
-        { src: 'package.json', dest: 'lib' },
-        { src: 'README.md', dest: 'lib' },
+        { src: 'typings/**/*', dest: `${dest}/typings` },
+        { src: 'src/scripts/**/*', dest: `${dest}/scripts` },
+        { src: 'package.json', dest: dest },
+        { src: 'README.md', dest: dest },
       ]
     })
   ],
