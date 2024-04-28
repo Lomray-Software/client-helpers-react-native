@@ -1,8 +1,8 @@
 import batcher from 'atomic-batcher';
 import axios from 'axios';
+import type NewRelic from 'newrelic-react-native-agent';
 import type { configLoggerType, transportFunctionType } from 'react-native-logs';
 import { logger, consoleTransport } from 'react-native-logs';
-import type NewRelic from 'newrelic-react-native-agent';
 import uuid from 'react-native-uuid';
 import { tempMemoryTransport } from '../debug/temp-memory-transport';
 import Config from './config';
@@ -60,7 +60,7 @@ const newRelicTransport = (
   }
 
   if (level.text === 'error' && msg) {
-    NewRelic?.recordError(new Error(msg as string));
+    void NewRelic?.recordError(new Error(msg as string));
   }
 };
 
