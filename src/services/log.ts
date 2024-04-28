@@ -2,6 +2,7 @@ import batcher from 'atomic-batcher';
 import axios from 'axios';
 import type { configLoggerType, transportFunctionType } from 'react-native-logs';
 import { logger, consoleTransport } from 'react-native-logs';
+import type NewRelic from 'newrelic-react-native-agent';
 import uuid from 'react-native-uuid';
 import { tempMemoryTransport } from '../debug/temp-memory-transport';
 import Config from './config';
@@ -17,6 +18,7 @@ export interface ILogType extends TLogger {
 export interface ILoggerOptions {
   params?: configLoggerType;
   crashlytics?: any;
+  newrelic?: typeof NewRelic;
   grafana?: {
     url: string;
     token: string;
@@ -41,6 +43,24 @@ const firebaseCrashlyticsTransport = (
 
   if (level.text === 'error' && msg) {
     crashlytics.recordError(new Error(msg as string));
+  }
+};
+
+/**
+ * NewRelic transport
+ */
+const newRelicTransport = (
+  NewRelic: ILoggerOptions['newrelic'],
+  { msg, level, rawMsg }: Parameters<transportFunctionType>[0],
+): void => {
+  try {
+    NewRelic?.sendConsole('log', rawMsg);
+  } catch (e) {
+    // skip
+  }
+
+  if (level.text === 'error' && msg) {
+    NewRelic?.recordError(new Error(msg as string));
   }
 };
 
@@ -109,6 +129,7 @@ const grafanaLokiTransport = ({
 const initLogger = ({
   grafana,
   crashlytics,
+  newrelic,
   hasTempMemoryTransport = true,
   params = {},
 }: ILoggerOptions = {}): ILogType => {
@@ -140,6 +161,10 @@ const initLogger = ({
         // Production transport
         if (crashlytics) {
           firebaseCrashlyticsTransport(crashlytics, props);
+        }
+
+        if (newrelic) {
+          newRelicTransport(newrelic, props);
         }
 
         if (grafanaTransport) {
