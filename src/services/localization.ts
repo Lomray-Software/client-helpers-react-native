@@ -5,11 +5,8 @@ import { getLocales, findBestLanguageTag } from 'react-native-localize';
 
 export interface ICustomI18n extends Omit<Ii18n, 't'> {
   t: TFunction<Namespace>;
-  getCurrentLocale: () => string | undefined;
+  getSystemLocale: () => string | undefined;
   defaultLanguage: string;
-  supportLanguages: string[];
-  setLanguage: (lng?: string) => boolean | Promise<TFunction>;
-  setDefaultLanguage: () => boolean | Promise<TFunction>;
 }
 
 const customI18n = i18n as ICustomI18n;
@@ -17,7 +14,7 @@ const customI18n = i18n as ICustomI18n;
 /**
  * Detects what language is installed as default on the device
  */
-customI18n.getCurrentLocale = (): string => {
+customI18n.getSystemLocale = (): string => {
   const localeArray = getLocales().map((item) => item.languageCode);
   const language = findBestLanguageTag(localeArray);
 
@@ -25,33 +22,7 @@ customI18n.getCurrentLocale = (): string => {
     return customI18n.defaultLanguage;
   }
 
-  // temporary before switch locale in app
-  return customI18n.supportLanguages.includes(language.languageTag)
-    ? language.languageTag
-    : customI18n.defaultLanguage;
-};
-
-/**
- * Change application language
- */
-customI18n.setLanguage = (lng): boolean | Promise<TFunction> => {
-  const language = lng ?? customI18n.getCurrentLocale();
-
-  if (language) {
-    return i18n.changeLanguage(language);
-  }
-
-  return false;
-};
-
-customI18n.setDefaultLanguage = (): boolean | Promise<TFunction> => {
-  const language = customI18n.getCurrentLocale();
-
-  if (!language || language === customI18n.defaultLanguage) {
-    return true;
-  }
-
-  return customI18n.setLanguage(language);
+  return language.languageTag;
 };
 
 const originalInit: (typeof i18n)['init'] = i18n.init.bind(i18n);
@@ -63,7 +34,7 @@ const customInit = (options: InitOptions, callback?: Callback): Promise<TFunctio
       compatibilityJSON: 'v3',
       load: 'languageOnly',
       fallbackLng: 'en',
-      lng: customI18n.getCurrentLocale(),
+      lng: customI18n.defaultLanguage,
       keySeparator: false,
       defaultNS: 'translation',
       ...options,
