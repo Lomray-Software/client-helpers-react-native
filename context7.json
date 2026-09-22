@@ -1,0 +1,28 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "client-helpers-react-native",
+  "description": "Subpath React Native hooks, stores, components and native-service integration helpers.",
+  "branch": "prod",
+  "folders": [],
+  "excludeFolders": [
+    "node_modules",
+    "src",
+    "lib",
+    "example",
+    "__tests__",
+    "__mocks__",
+    "__helpers__",
+    "scripts",
+    ".github"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
+  ],
+  "rules": [
+    "Version 3.6.0 has no published root index; import individual subpaths and check their native prerequisites.",
+    "Declared peers are not a tested compatibility matrix. Keyboard hooks remove their own listeners on unmount."
+  ]
+}
