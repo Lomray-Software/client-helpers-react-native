@@ -1,5 +1,5 @@
-import { isAndroid } from '@lomray/react-native-layout-helper';
 import { NativeModules } from 'react-native';
+import { isAndroid } from './platform';
 
 /**
  * Get navigation bar dimension on android
@@ -8,7 +8,7 @@ import { NativeModules } from 'react-native';
 const getNavigationBarDimension = (): ReturnType<
   (typeof NativeModules)['CommonModule']['getNavigationBarDimension']
 > => {
-  if (!isAndroid) {
+  if (!isAndroid()) {
     return Promise.resolve({});
   }
 

@@ -1,11 +1,17 @@
-import { isAndroid, wp } from '@lomray/react-native-layout-helper';
+import { Dimensions } from 'react-native';
 import type {
   AnimationOptions,
   OptionsAnimationPropertyConfig,
   ViewAnimationOptions,
 } from 'react-native-navigation';
+import { isAndroid } from '../helpers/platform';
 
 const SCREEN_ANIMATION_DURATION = 300;
+
+/**
+ * The screen slides the full width, so it tracks the real device
+ */
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const baseAnimation: OptionsAnimationPropertyConfig = {
   duration: SCREEN_ANIMATION_DURATION,
@@ -16,7 +22,7 @@ const baseAnimation: OptionsAnimationPropertyConfig = {
 
 const slideInFromRight: ViewAnimationOptions = {
   translationX: {
-    from: wp(100),
+    from: SCREEN_WIDTH,
     to: 0,
     ...baseAnimation,
   },
@@ -41,7 +47,7 @@ const slideOutToLeft: ViewAnimationOptions = {
 const slideOutToRight: ViewAnimationOptions = {
   translationX: {
     from: 0,
-    to: wp(100),
+    to: SCREEN_WIDTH,
     ...baseAnimation,
   },
 };
@@ -79,7 +85,7 @@ const slideOutAndExit: ViewAnimationOptions = {
  * @type {object}
  */
 const screenAnimations: AnimationOptions = {
-  ...(isAndroid
+  ...(isAndroid()
     ? {
         push: {
           content: {
@@ -104,7 +110,7 @@ const screenAnimations: AnimationOptions = {
     : {}),
   setRoot: {
     waitForRender: true,
-    ...(isAndroid
+    ...(isAndroid()
       ? {
           enter: {
             waitForRender: true,

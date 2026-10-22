@@ -1,11 +1,11 @@
-import { isAndroid } from '@lomray/react-native-layout-helper';
 import { NativeModules } from 'react-native';
+import { isAndroid } from '../../helpers/platform';
 
 /**
  * Hide notification badge in android
  */
 const HideAndroidNotificationBadge = (): void => {
-  if (!isAndroid) {
+  if (!isAndroid()) {
     return;
   }
 

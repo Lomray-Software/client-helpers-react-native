@@ -1,12 +1,18 @@
-import { isIOS } from '@lomray/react-native-layout-helper';
 import type { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
-import analytics from '@react-native-firebase/analytics';
+import { getAnalytics } from '@react-native-firebase/analytics';
+import { getApp } from '@react-native-firebase/app';
 import _ from 'lodash';
 import type { ConversionData } from 'react-native-appsflyer';
 import DeviceInfo from 'react-native-device-info';
 import { getTrackingStatus, requestTrackingPermission } from 'react-native-tracking-transparency';
+import { isIOS } from '../helpers/platform';
 import Config from './config';
 import type { ILogType } from './log';
+
+/**
+ * Modular Firebase analytics instance
+ */
+const analytics = (): FirebaseAnalyticsTypes.Module => getAnalytics(getApp());
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 type FacebookSDK = typeof import('react-native-fbsdk-next');
@@ -332,7 +338,7 @@ class Analytics {
    * Check APP TRACKING TRANSPARENCY
    */
   protected async checkATT(): Promise<boolean> {
-    if (!isIOS || !this.isATT) {
+    if (!isIOS() || !this.isATT) {
       return true;
     }
 

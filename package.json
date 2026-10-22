@@ -35,7 +35,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@lomray/react-native-layout-helper": "^2.0.0",
     "@lomray/reactotron-mobx-store-manager": "^1.2.0",
     "atomic-batcher": "^1.0.2",
     "react-native-flash-message": "^0.4.2",
@@ -92,9 +91,9 @@
   "peerDependencies": {
     "@lomray/client-helpers": "*",
     "@react-native-firebase/analytics": "^21.8.0",
+    "@react-native-firebase/app": "^21.8.0",
     "axios": "*",
     "lodash": "*",
-    "react-native-code-push": ">=7.0.5",
     "react-native-device-info": ">=10.6.0",
     "react-native-haptic-feedback": ">=2.0.3",
     "react-native-localize": "^3.0.6",

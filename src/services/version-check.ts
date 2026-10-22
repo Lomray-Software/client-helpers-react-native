@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { isAndroid } from '../helpers/platform';
 import Config from './config';
 import type { ILogType } from './log';
 
@@ -59,7 +60,7 @@ class VersionCheck {
         headers: { 'sec-fetch-site': 'same-origin' },
       });
 
-      if (Platform.OS === 'android') {
+      if (isAndroid()) {
         const text = await res.text();
 
         const match = text.match(/Current Version.+?>([\d.-]+)<\/span>/);

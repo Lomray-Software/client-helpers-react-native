@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import type { WithTranslation } from 'react-i18next';
 import { Text, View, Button } from 'react-native';
-import CodePush from 'react-native-code-push';
 import Config from '../../services/config';
 import styles from './styles';
 
@@ -29,10 +28,10 @@ class ErrorBoundary extends Component<WithTranslation & { children: ReactNode },
   }
 
   /**
-   * Reload app
+   * Drop the error state and render the tree again
    */
   handleReloadApp = () => {
-    CodePush.restartApp();
+    this.setState({ hasError: false });
   };
 
   render(): ReactNode {
