@@ -1,8 +1,8 @@
-import { isAndroid } from '@lomray/react-native-layout-helper';
 import _ from 'lodash';
 import { BackHandler, NativeModules, ToastAndroid } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Navigation } from 'react-native-navigation';
+import { isAndroid } from '../../helpers/platform';
 import Config from '../../services/config';
 import i18n from '../../services/localization';
 
@@ -15,7 +15,7 @@ import i18n from '../../services/localization';
  * NOTE: Wait popScreenDuration and if resetTimer is not called (screen is not popped) then show toast.
  */
 const HandleBackButtonAndroid = (): void => {
-  if (!isAndroid) {
+  if (!isAndroid()) {
     return;
   }
 

@@ -1,4 +1,3 @@
-import { fs, hp, wp } from '@lomray/react-native-layout-helper';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -8,7 +7,7 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     backgroundColor: '#010101',
-    height: hp(5.419), // 44
+    height: 44,
     position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
@@ -17,11 +16,11 @@ const styles = StyleSheet.create({
   title: {
     color: '#FFFFFF',
     fontWeight: '700',
-    fontSize: fs(4.533), // 17
+    fontSize: 17,
   },
   doneWrapper: {
     position: 'absolute',
-    right: wp(4.267), // 16
+    right: 16,
     zIndex: 1,
   },
   done: {

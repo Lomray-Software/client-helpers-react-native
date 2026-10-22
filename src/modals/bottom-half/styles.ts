@@ -1,4 +1,3 @@
-import { hp, wp } from '@lomray/react-native-layout-helper';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -12,8 +11,8 @@ const styles = StyleSheet.create({
   dropdown: {
     marginTop: 'auto',
     justifyContent: 'flex-start',
-    paddingBottom: hp(6.158), // 50
-    paddingHorizontal: wp(7.467), // 28
+    paddingBottom: 50,
+    paddingHorizontal: 28,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -23,12 +22,12 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: hp(1.478), // 12
-    paddingBottom: hp(2.956), // 24
+    paddingTop: 12,
+    paddingBottom: 24,
   },
   controlButton: {
-    width: wp(11.733), // 44
-    height: hp(0.493), // 4
+    width: 44,
+    height: 4,
     backgroundColor: 'rgba(18, 18, 29, 0.1)',
     borderRadius: 10,
   },
